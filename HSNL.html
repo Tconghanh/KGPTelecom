@@ -5,187 +5,156 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hồ Sơ Năng Lực - Khang Gia Phúc</title>
     
-    <!-- Thư viện cần thiết -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@master/lib/turn.min.js"></script>
 
     <style>
         body {
-            background: #2c2c2c;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
+            background: #333; margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden; font-family: Arial, sans-serif;
+            -webkit-user-select: none; user-select: none;
         }
 
-        #flipbook-container {
-            width: 90vw;
-            height: 85vh;
-            display: none; /* Hiện sau khi load xong trang 1 */
+        /* Vùng chứa sách */
+        #viewport {
+            width: 90%; height: 85%;
+            display: flex; justify-content: center; align-items: center;
         }
 
         #flipbook {
-            width: 100%;
-            height: 100%;
+            display: none; /* Hiện sau khi init xong */
+            width: 1000px; height: 700px;
         }
 
         .page {
             background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
-            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+        canvas { width: 100%; height: 100%; display: block; }
 
+        /* Màn hình chờ */
         #loading-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            z-index: 1000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #1a1a1a; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: white; z-index: 9999;
         }
-
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+        .spinner {
+            border: 4px solid #f3f3f3; border-top: 4px solid #3498db;
+            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;
         }
-
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+        
         @media print { body { display: none !important; } }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
     <div id="loading-overlay">
-        <div class="loader"></div>
-        <div id="status">Đang tải hồ sơ... 0%</div>
+        <div class="spinner"></div>
+        <p id="status">Đang tải hồ sơ... 0%</p>
     </div>
 
-    <div id="flipbook-container">
+    <div id="viewport">
         <div id="flipbook">
-            <!-- Các trang sẽ được JS tự động tạo -->
+            <!-- Pages added by JS -->
         </div>
     </div>
 
     <script>
-        // ĐƯỜNG DẪN FILE PDF CỦA BẠN
-        const pdfUrl = 'ho-so-nang-luc.pdf'; 
+        // 1. CẤU HÌNH PDF (Đảm bảo file này nằm cùng thư mục HSNL)
+        const PDF_URL = 'ho-so-nang-luc.pdf'; 
 
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         let pdfDoc = null;
-        let pagesRendered = {};
+        let renderedPages = new Set();
 
-        async function loadBook() {
+        async function start() {
             try {
-                const loadingTask = pdfjsLib.getDocument(pdfUrl);
-                
+                // Tải PDF
+                const loadingTask = pdfjsLib.getDocument(PDF_URL);
                 loadingTask.onProgress = (p) => {
-                    let percent = Math.round((p.loaded / p.total) * 100);
-                    if (!isNaN(percent)) $('#status').text(`Đang tải dữ liệu: ${percent}%`);
+                    let per = Math.min(Math.round((p.loaded / p.total) * 100), 99);
+                    if (!isNaN(per)) $('#status').text(`Đang tải dữ liệu: ${per}%`);
                 };
 
                 pdfDoc = await loadingTask.promise;
                 const numPages = pdfDoc.numPages;
 
-                // Lấy kích thước chuẩn từ trang đầu tiên
+                // Lấy kích thước chuẩn từ trang 1
                 const firstPage = await pdfDoc.getPage(1);
                 const viewport = firstPage.getViewport({ scale: 1.5 });
-                const aspectRatio = viewport.width / viewport.height;
+                const ratio = viewport.width / viewport.height;
 
-                // Thiết lập kích thước cho Flipbook
-                const bookHeight = $('#flipbook-container').height();
-                const bookWidth = bookHeight * aspectRatio * 2; // Nhân đôi cho 2 trang
+                // Tính toán kích thước hiển thị
+                const winH = $(window).height() * 0.85;
+                const bookH = winH;
+                const bookW = bookH * ratio * 2;
 
-                // Tạo khung cho tất cả các trang
+                // Tạo các khung trang rỗng ngay lập tức
                 for (let i = 1; i <= numPages; i++) {
-                    const pageDiv = $('<div />', { "class": "page" }).html('<div class="loading-page"></div>');
-                    $('#flipbook').append(pageDiv);
+                    $('#flipbook').append(`<div class="page" id="p${i}"><div style="display:flex; height:100%; align-items:center; justify-content:center; color:#ccc">Đang vẽ trang ${i}...</div></div>`);
                 }
 
-                // Khởi tạo Turn.js
-                $('#flipbook').turn({
-                    width: bookWidth,
-                    height: bookHeight,
+                // Khởi tạo Flipbook
+                $('#flipbook').show().turn({
+                    width: bookW,
+                    height: bookH,
                     autoCenter: true,
-                    elevation: 50,
+                    acceleration: true,
                     gradients: true,
-                    duration: 1000,
+                    elevation: 50,
                     when: {
-                        turning: function(e, page) {
-                            renderPage(page);
-                            if (page + 1 <= numPages) renderPage(page + 1);
+                        turning: function(e, page, view) {
+                            // Khi lật đến đâu, vẽ trang đó (Lazy Load)
+                            view.forEach(p => { if(p > 0) renderCanvas(p); });
                         }
                     }
                 });
 
-                // Render trang 1 & 2 ngay lập tức
-                await renderPage(1);
-                await renderPage(2);
+                // Vẽ 2 trang đầu
+                await renderCanvas(1);
+                await renderCanvas(2);
 
                 $('#loading-overlay').fadeOut();
-                $('#flipbook-container').fadeIn();
 
             } catch (err) {
-                $('#status').text('Lỗi: File không tồn tại hoặc lỗi đường dẫn.');
-                console.error(err);
+                $('#status').html('<span style="color:red">Lỗi: Không tìm thấy file PDF.<br>Vui lòng kiểm tra file "ho-so-nang-luc.pdf" đã tải lên host chưa.</span>');
             }
         }
 
-        async function renderPage(num) {
-            if (pagesRendered[num] || num > pdfDoc.numPages) return;
+        async function renderCanvas(num) {
+            if (renderedPages.has(num) || num > pdfDoc.numPages) return;
+            renderedPages.add(num);
 
             const page = await pdfDoc.getPage(num);
-            const $pageElement = $($('#flipbook').turn('pages')[num - 1]);
-            
+            const viewport = page.getViewport({ scale: 2 }); // Tăng nét
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
-            const viewport = page.getViewport({ scale: 2 }); // Scale cao để rõ nét
-
             canvas.height = viewport.height;
             canvas.width = viewport.width;
 
             await page.render({ canvasContext: context, viewport: viewport }).promise;
-            
-            $pageElement.html(canvas);
-            pagesRendered[num] = true;
+            $(`#p${num}`).empty().append(canvas);
         }
 
-        // Điều khiển bằng phím mũi tên
+        // Điều khiển phím mũi tên
         $(window).bind('keydown', function(e) {
             if (e.keyCode == 37) $('#flipbook').turn('previous');
             else if (e.keyCode == 39) $('#flipbook').turn('next');
         });
 
-        // Chống sao chép phím tắt
+        // Chặn phím tắt
         document.onkeydown = function(e) {
             if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 80 || e.keyCode === 73)) return false;
             if (e.keyCode === 123) return false;
         };
 
-        $(window).ready(loadBook);
+        $(window).ready(start);
     </script>
 </body>
 </html>
