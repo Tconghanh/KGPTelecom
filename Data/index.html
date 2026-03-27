@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows Installation Toolkit | Professional OS Setup</title>
+    <title>Windows Ultimate Toolkit | Professional Setup</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #0078d4;
-            --accent: #00c2ff;
-            --bg-dark: #0a0a0a;
-            --glass: rgba(255, 255, 255, 0.07);
+            --accent: #00f2fe;
+            --bg-dark: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --text: #ffffff;
+            --text: #e0e0e0;
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
@@ -30,174 +31,209 @@
             min-height: 100vh;
         }
 
-        /* Canvas background hiệu ứng hạt */
+        /* Particles Background */
         #particles-js {
             position: fixed;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0a 100%);
+            background: radial-gradient(circle at 50% 50%, #101827 0%, #050505 100%);
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 50px 20px;
+            padding: 40px 20px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 60px;
-            animation: fadeInDown 1s ease;
+            margin-bottom: 50px;
+            animation: fadeInScale 0.8s ease-out;
         }
 
         header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #fff, var(--accent));
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         header p {
-            color: #aaa;
+            color: #888;
             font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
         }
 
+        /* Glass Card */
         .card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            border-radius: 24px;
+            padding: 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px) scale(1.02);
             border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0, 194, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 15px 40px rgba(0, 242, 254, 0.15);
         }
 
         .card h2 {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
+            font-size: 1.25rem;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--accent);
+            gap: 12px;
+            color: #fff;
         }
 
-        /* PowerShell Command Box */
+        .card h2 i {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* PowerShell Styling */
+        .ps-section {
+            grid-column: 1 / -1;
+            background: rgba(0, 120, 212, 0.05);
+        }
+
+        .cmd-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 15px;
+        }
+
         .cmd-box {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 15px;
-            border-radius: 10px;
+            background: #000;
+            padding: 14px 18px;
+            border-radius: 12px;
             font-family: 'Consolas', monospace;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--primary);
-            position: relative;
+            font-size: 0.85rem;
+            border: 1px solid #333;
             cursor: pointer;
+            position: relative;
+            transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .cmd-box:hover {
-            background: rgba(0, 0, 0, 0.6);
+            border-color: var(--accent);
+            background: #080808;
         }
 
-        .cmd-box i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.5;
+        .cmd-box span {
+            color: #00ff00;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        /* Link Buttons */
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 25px;
-            background: var(--primary);
+            padding: 14px 20px;
+            background: linear-gradient(135deg, var(--primary), #005a9e);
             color: white;
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-weight: 600;
-            width: 100%;
             transition: 0.3s;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
         }
 
         .btn:hover {
-            background: #0086ed;
             filter: brightness(1.2);
+            box-shadow: 0 5px 15px rgba(0, 120, 212, 0.4);
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
+        .btn-soft {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        }
+
+        .btn-outline {
+            background: transparent;
             border: 1px solid var(--glass-border);
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .btn-outline:hover {
+            background: var(--glass-border);
         }
 
-        /* Toast notification */
+        /* Toast Notification */
         #toast {
             visibility: hidden;
-            min-width: 250px;
-            background-color: var(--accent);
+            min-width: 280px;
+            background: #fff;
             color: #000;
             text-align: center;
-            border-radius: 50px;
+            border-radius: 12px;
             padding: 16px;
             position: fixed;
-            z-index: 100;
+            z-index: 1000;
             left: 50%;
-            bottom: 30px;
+            bottom: 40px;
             transform: translateX(-50%);
-            font-weight: bold;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         #toast.show {
             visibility: visible;
-            animation: fadeInUp 0.5s, fadeOut 0.5s 2.5s;
+            animation: slideUp 0.4s forwards, fadeOut 0.4s 2.5s forwards;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; bottom: 0; }
-            to { opacity: 1; bottom: 30px; }
+        @keyframes slideUp {
+            from { bottom: 0; opacity: 0; }
+            to { bottom: 40px; opacity: 1; }
         }
 
         @keyframes fadeOut {
-            from { opacity: 1; bottom: 30px; }
-            to { opacity: 0; bottom: 0; }
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
 
-        .badge {
-            font-size: 0.7rem;
-            padding: 4px 8px;
-            background: rgba(0, 194, 255, 0.2);
-            border-radius: 5px;
-            margin-left: 10px;
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.2rem; }
+            .cmd-group { grid-template-columns: 1fr; }
         }
-
     </style>
 </head>
 <body>
@@ -206,86 +242,107 @@
 
     <div class="container">
         <header>
-            <h1>Windows Setup Toolkit</h1>
-            <p>Giải pháp tối ưu cho việc cài đặt và tối ưu hóa Windows chuyên nghiệp</p>
+            <p>Technician Deployment Tool</p>
+            <h1>Windows Manager</h1>
         </header>
 
         <div class="grid">
-            <!-- Section 1: ISO Downloads -->
-            <div class="card" style="grid-column: span 1;">
-                <h2><i class="fab fa-microsoft"></i> Microsoft Direct</h2>
-                <p style="margin-bottom: 20px; color: #ccc;">Tải xuống các bản ISO Windows chính gốc trực tiếp từ máy chủ Microsoft.</p>
+            
+            <!-- Kho Phần Mềm HTC -->
+            <div class="card" style="border-top: 4px solid #ff416c;">
+                <div>
+                    <h2><i class="fas fa-box-open"></i> Kho Phần Mềm HTCG</h2>
+                    <p>Tổng hợp đầy đủ các phần mềm văn phòng, đồ họa, và công cụ hệ thống cần thiết sau khi cài Win.</p>
+                </div>
+                <a href="https://htcg.vn/soft/" target="_blank" class="btn btn-soft">
+                    <i class="fas fa-cloud-download-alt"></i> Truy cập HTCG Soft
+                </a>
+            </div>
+
+            <!-- Microsoft ISO -->
+            <div class="card">
+                <div>
+                    <h2><i class="fab fa-windows"></i> Microsoft Official</h2>
+                    <p>Tải trực tiếp Windows 10, 11 chính chủ từ máy chủ Microsoft để đảm bảo tính ổn định nhất.</p>
+                </div>
                 <a href="https://www.microsoft.com/software-download/" target="_blank" class="btn">
                     <i class="fas fa-download"></i> Tải Windows ISO
                 </a>
             </div>
 
-            <!-- Section 2: Management -->
+            <!-- Google Sheet Data -->
             <div class="card">
-                <h2><i class="fas fa-table"></i> Quản lý dữ liệu</h2>
-                <p style="margin-bottom: 20px; color: #ccc;">Truy cập bảng tính quản lý phần mềm và dữ liệu hệ thống.</p>
-                <a href="https://docs.google.com/spreadsheets/d/1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk" target="_blank" class="btn btn-secondary">
-                    <i class="fas fa-external-link-alt"></i> Mở Google Sheets
+                <div>
+                    <h2><i class="fas fa-database"></i> Data Quản Lý</h2>
+                    <p>Hệ thống quản lý dữ liệu, ghi chú và các tài liệu hướng dẫn cài đặt nội bộ.</p>
+                </div>
+                <a href="https://docs.google.com/spreadsheets/d/1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk" target="_blank" class="btn btn-outline">
+                    <i class="fas fa-table"></i> Google Sheets
                 </a>
             </div>
 
-            <!-- Section 3: PowerShell Tools -->
-            <div class="card" style="grid-column: 1 / -1;">
-                <h2><i class="fas fa-terminal"></i> PowerShell Automation <span class="badge">Click để copy</span></h2>
-                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+            <!-- PowerShell Scripts -->
+            <div class="card ps-section">
+                <h2><i class="fas fa-terminal"></i> PowerShell Automation Tools</h2>
+                <div class="cmd-group">
                     <div>
-                        <p style="margin-bottom: 10px;">1. Mở khóa Windows & Office (All-in-one):</p>
+                        <p style="margin-bottom: 8px; font-size: 0.85rem; color: #888;">Mở khóa Windows & Office (Activate):</p>
                         <div class="cmd-box" onclick="copyText('iex (irm https://get.activated.win)')">
-                            iex (irm https://get.activated.win)
+                            <span>iex (irm https://get.activated.win)</span>
                             <i class="far fa-copy"></i>
                         </div>
                     </div>
                     <div>
-                        <p style="margin-bottom: 10px;">2. Win11 Debloat (Tối ưu hóa hệ thống):</p>
+                        <p style="margin-bottom: 8px; font-size: 0.85rem; color: #888;">Win11 Debloat (Tối ưu hệ thống):</p>
                         <div class="cmd-box" onclick="copyText('& ([scriptblock]::Create((irm https://debloat.raphi.re/)))')">
-                            & ([scriptblock]::Create((irm "https://debloat.raphi.re/")))
+                            <span>& ([scriptblock]::Create((irm "https://debloat.raphi.re/")))</span>
                             <i class="far fa-copy"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Section 4: External Tools -->
+            <!-- DLC Boot -->
             <div class="card">
-                <h2><i class="fas fa-toolbox"></i> DLC Boot</h2>
-                <p style="margin-bottom: 20px; color: #ccc;">Công cụ cứu hộ máy tính đa năng từ Trần Duy Linh.</p>
-                <a href="https://dlcboot.com/" target="_blank" class="btn btn-secondary">Truy cập Website</a>
+                <div>
+                    <h2><i class="fas fa-briefcase"></i> DLC Boot</h2>
+                    <p>Công cụ cứu hộ đa năng nổi tiếng, hỗ trợ chia ổ đĩa, phá mật khẩu và quét virus.</p>
+                </div>
+                <a href="https://dlcboot.com/" target="_blank" class="btn btn-outline">Truy cập Website</a>
             </div>
 
+            <!-- Anhdv Boot -->
             <div class="card">
-                <h2><i class="fas fa-tools"></i> Anhdv Boot</h2>
-                <p style="margin-bottom: 20px; color: #ccc;">Bộ công cụ cứu hộ WinPE chuyên nghiệp, ổn định nhất.</p>
-                <a href="https://anhdvboot.com/" target="_blank" class="btn btn-secondary">Truy cập Website</a>
+                <div>
+                    <h2><i class="fas fa-tools"></i> Anhdv Boot</h2>
+                    <p>Bộ WinPE chuyên nghiệp nhất hiện nay với độ tương thích phần cứng cực cao.</p>
+                </div>
+                <a href="https://anhdvboot.com/" target="_blank" class="btn btn-outline">Truy cập Website</a>
             </div>
+
         </div>
     </div>
 
-    <div id="toast">Đã sao chép vào bộ nhớ tạm!</div>
+    <div id="toast">Đã sao chép lệnh thành công!</div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Hiệu ứng hạt background
+        // Cấu hình Particles
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#ffffff" },
+                "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#00f2fe" },
                 "shape": { "type": "circle" },
-                "opacity": { "value": 0.2, "random": false },
-                "size": { "value": 3, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.1, "width": 1 },
-                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+                "opacity": { "value": 0.15, "random": true },
+                "size": { "value": 2, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00f2fe", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "out_mode": "out" }
             },
             "interactivity": {
-                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } },
-                "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } } }
-            },
-            "retina_detect": true
+                "events": { "onhover": { "enable": true, "mode": "bubble" }, "onclick": { "enable": true, "mode": "push" } },
+                "modes": { "bubble": { "distance": 200, "size": 4, "duration": 2, "opacity": 0.8, "speed": 3 } }
+            }
         });
 
         // Hàm copy văn bản
