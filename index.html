@@ -21,13 +21,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Roboto', sans-serif; line-height: 1.6; color: var(--dark-gray); background: #fff; overflow-x: hidden; }
 
-        /* --- HEADER & NAV (MOBILE OPTIMIZED) --- */
+        /* --- HEADER & NAV --- */
         header { background: rgba(255,255,255,0.96); backdrop-filter: blur(15px); box-shadow: var(--shadow-sm); position: fixed; width: 100%; top: 0; z-index: 1000; height: 70px; display: flex; align-items: center; }
         nav { max-width: 1400px; margin: auto; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; width: 100%; gap: 10px; }
         .nav-left { display: flex; align-items: center; gap: 10px; flex: 1; }
         .logo img { height: 45px; width: auto; transition: 0.3s; }
         .search-container { position: relative; flex: 1; max-width: 350px; }
-        .search-box { position: relative; width: 100%; }
         .search-box input { width: 100%; padding: 10px 40px 10px 15px; border-radius: 25px; border: 1.5px solid #eee; outline: none; font-size: 0.85rem; transition: 0.3s; background: #f1f5f9; }
         .search-box input:focus { border-color: var(--primary); background: #fff; }
         .search-box i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); cursor: pointer; }
@@ -60,7 +59,7 @@
         .section-title h2 { font-size: 2.2rem; color: var(--primary); text-align: center; text-transform: uppercase; font-style: italic; }
         .underline { width: 70px; height: 4px; background: var(--btn-orange); margin: 10px auto 30px; border-radius: 2px; }
 
-        /* --- BỘ LỌC (DROPDOWNS) --- */
+        /* --- FILTERS --- */
         .filter-bar { 
             background: var(--light-bg); padding: 20px; border-radius: var(--radius); 
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
@@ -76,13 +75,32 @@
             background-repeat: no-repeat; background-position: right 15px center; background-size: 15px;
         }
 
+        /* --- PRODUCT GRID --- */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
         .product-card { background: var(--white); border: 1px solid #f1f5f9; border-radius: var(--radius); padding: 15px; text-align: center; transition: 0.3s; display: flex; flex-direction: column; cursor: pointer; box-shadow: var(--shadow-sm); height: 100%; }
-        .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
         .product-card img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 12px; }
         .product-card h3 { font-size: 0.85rem; margin-bottom: 10px; height: 40px; overflow: hidden; color: #334155; font-weight: 700; }
         .product-card .price { color: var(--price-red); font-weight: 700; font-size: 1.1rem; margin-bottom: 12px; }
         .btn-add-cart { background: var(--primary); color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+
+        /* --- INTRO (Restored 2 columns) --- */
+        .intro-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+        .intro-img-box { position: relative; border-radius: var(--radius); overflow: hidden; height: 380px; box-shadow: var(--shadow-lg); }
+        .intro-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .slogan-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 113, 186, 0.85); color: #fff; padding: 15px; text-align: center; font-weight: 700; }
+
+        /* --- ACTIVITY (Restored Cards) --- */
+        .activity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .activity-item { background: #fff; padding: 30px 20px; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow-sm); border-top: 4px solid var(--primary); }
+        .activity-icon { font-size: 3rem; color: var(--primary); margin-bottom: 15px; }
+
+        /* --- PROJECTS (Restored Marquee) --- */
+        #projects { background: #0f172a; color: #fff; overflow: hidden; padding: 60px 0; }
+        .marquee { display: flex; width: max-content; animation: scroll 40s linear infinite; gap: 20px; }
+        .proj-card { width: 300px; border-radius: var(--radius); overflow: hidden; background: #1e293b; cursor: pointer; }
+        .proj-card img { width: 100%; height: 180px; object-fit: cover; }
+        .proj-card h4 { padding: 15px; font-size: 0.85rem; text-align: center; }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         /* MODALS */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(5px); }
@@ -91,7 +109,8 @@
         .modal-left { padding: 30px; border-right: 1px solid #eee; background: #fff; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
         .modal-right { padding: 40px; overflow-y: auto; display: flex; flex-direction: column; }
         .main-preview { width: 100%; height: 350px; object-fit: contain; margin-bottom: 20px; flex-shrink: 0; }
-        .thumbs img { width: 60px; height: 60px; border: 1px solid #eee; border-radius: 8px; margin: 4px; cursor: pointer; }
+        .thumbs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+        .thumbs img { width: 60px; height: 60px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; }
         .specs-list { list-style: none; margin-top: 15px; }
         .specs-list li { position: relative; padding-left: 25px; margin-bottom: 8px; font-size: 0.95rem; }
         .specs-list li::before { content: '✓'; position: absolute; left: 0; color: #2ecc71; font-weight: 700; }
@@ -103,15 +122,15 @@
             header { height: 65px; }
             .logo img { height: 35px; }
             .menu-toggle { display: block; order: 3; }
-            nav ul { position: fixed; top: 0; right: -100%; width: 75%; height: 100vh; background: #fff; flex-direction: column; padding: 80px 20px; transition: 0.4s; z-index: 1002; box-shadow: -10px 0 20px rgba(0,0,0,0.1); align-items: flex-start; }
+            nav ul { position: fixed; top: 0; right: -100%; width: 75%; height: 100vh; background: #fff; flex-direction: column; padding: 80px 20px; transition: 0.4s; z-index: 1002; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
             nav ul.active { right: 0; }
             .dropdown-menu { position: static; display: block; box-shadow: none; border: none; padding-left: 15px; }
             .slider-container { height: 200px; margin-top: 65px; }
+            .intro-container { grid-template-columns: 1fr; padding: 10px; }
+            .intro-img-box { height: 250px; }
             .modal-content { grid-template-columns: 1fr; overflow-y: auto; }
             .modal-left { border-right: none; border-bottom: 1px solid #eee; padding: 15px; }
-            .main-preview { height: 220px; }
-            .modal-right { padding: 20px; }
-            .filter-bar { grid-template-columns: 1fr; }
+            .modal-right { padding: 20px; overflow-y: visible; }
         }
 
         /* --- PRINT STYLES --- */
@@ -180,7 +199,7 @@
         </div>
     </div>
 
-    <!-- SẢN PHẨM & BỘ LỌC -->
+    <!-- 2. SẢN PHẨM -->
     <section id="products" class="no-print">
         <div class="section-title"><h2>Sản phẩm tiêu biểu</h2><div class="underline"></div></div>
         
@@ -210,6 +229,7 @@
         <div class="product-grid" id="product-grid"></div>
     </section>
 
+    <!-- 3. GIỚI THIỆU (Restored layout) -->
     <section id="intro" class="no-print">
         <div class="section-title"><h2>Giới thiệu</h2><div class="underline"></div></div>
         <div class="intro-container">
@@ -218,6 +238,7 @@
         </div>
     </section>
 
+    <!-- 4. LĨNH VỰC (Restored layout) -->
     <section id="activity" class="no-print" style="background: var(--light-bg); max-width: 100%;">
         <div style="max-width: 1300px; margin: auto;">
             <div class="section-title"><h2>Lĩnh vực hoạt động</h2><div class="underline"></div></div>
@@ -225,6 +246,7 @@
         </div>
     </section>
 
+    <!-- 5. DỰ ÁN (Restored slider) -->
     <section id="projects" class="no-print">
         <div class="section-title"><h2 style="color: white;">Dự án đã triển khai</h2><div class="underline"></div></div>
         <div class="marquee" id="project-list"></div>
@@ -237,7 +259,7 @@
 
     <div id="projModal" class="modal no-print" onclick="if(event.target==this) this.style.display='none'"><div class="modal-content"><span class="close-btn" onclick="document.getElementById('projModal').style.display='none'">&times;</span><div class="modal-left"><img id="pj-main-preview" class="main-preview" src=""><div class="thumbs" id="pj-thumb-box"></div></div><div class="modal-right"><div id="pj-cat" style="color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase;"></div><h2 id="pj-title" style="margin-bottom: 20px; color: var(--dark-gray); border-bottom: 2px solid #eee; padding-bottom: 15px;"></h2><div style="color: var(--btn-orange); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; margin-bottom: 15px;">📄 CHI TIẾT DỰ ÁN</div><div id="pj-content" style="white-space: pre-line; font-size: 1rem; color: #555; line-height: 1.8;"></div></div></div></div>
 
-    <div id="cartModal" class="modal no-print" onclick="if(event.target==this) this.style.display='none'"><div style="background:#fff; padding:30px; border-radius:20px; width:100%; max-width:850px; position: relative;"><span class="close-btn" onclick="document.getElementById('cartModal').style.display='none'">&times;</span><h2 style="text-align: center; color: var(--primary); margin-bottom: 20px;">GIỎ HÀNG BÁO GIÁ</h2><div style="max-height: 400px; overflow-y: auto;"><table style="width:100%; border-collapse:collapse; margin-bottom: 20px;"><thead><tr style="border-bottom:2px solid #eee; text-align:left;"><th>Sản phẩm</th><th style="width: 80px;">SL</th><th>Tiền</th><th>Xóa</th></tr></thead><tbody id="cart-items"></tbody></table></div><div style="text-align: right;"><h3>Tổng: <span id="cart-total-web" style="color: var(--price-red)">0đ</span></h3><div style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;"><button onclick="shareCart()" style="background: #3498db; color: white; padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.9rem;">🔗 CHIA SẺ GIỎ HÀNG</button><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"><button onclick="preparePrint(true)" style="background: #e67e22; color: white; padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">🏢 BÁO GIÁ CÔNG TY</button><button onclick="preparePrint(false)" style="background: #27ae60; color: white; padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">👤 BÁO GIÁ CÁ NHÂN</button></div></div></div></div></div>
+    <div id="cartModal" class="modal no-print" onclick="if(event.target==this) this.style.display='none'"><div style="background:#fff; padding:30px; border-radius:20px; width:100%; max-width:850px; position: relative;"><span class="close-btn" onclick="document.getElementById('cartModal').style.display='none'">&times;</span><h2 style="text-align: center; color: var(--primary); margin-bottom: 20px;">GIỎ HÀNG BÁO GIÁ</h2><div style="max-height: 400px; overflow-y: auto;"><table style="width:100%; border-collapse:collapse; margin-bottom: 20px;"><thead><tr style="border-bottom:2px solid #eee; text-align:left;"><th>Sản phẩm</th><th style="width: 80px;">SL</th><th>Tiền</th><th>Xóa</th></tr></thead><tbody id="cart-items"></tbody></table></div><div style="text-align: right;"><h3>Tổng: <span id="cart-total-web" style="color: var(--price-red)">0đ</span></h3><div style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;"><button onclick="shareCart()" style="background: #3498db; color: white; padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.9rem;">🔗 CHIA SẺ GIỎ HÀNG</button><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"><button onclick="preparePrint(true)" style="background: #e67e22; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">🏢 BÁO GIÁ CÔNG TY</button><button onclick="preparePrint(false)" style="background: #27ae60; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">👤 BÁO GIÁ CÁ NHÂN</button></div></div></div></div></div>
 
     <!-- PRINT SECTION -->
     <div id="print-section">
@@ -316,6 +338,7 @@
 
         async function init() {
             try {
+                // TRANG CHỦ
                 const home = await fetchData('Trang_Chu');
                 document.getElementById('intro-text').innerHTML = home[2]?.c[1]?.v || "";
                 
@@ -334,10 +357,10 @@
                 const fb = home[6]?.c[1]?.v || "";
                 document.getElementById('f3-fb').innerHTML = `<iframe src="https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(fb)}&tabs=timeline&width=340&height=250&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true" width="100%" height="250" style="border:none;overflow:hidden" scrolling="no" frameborder="0"></iframe>`;
 
+                // SẢN PHẨM
                 const pr = await fetchData('San_Pham');
                 products = pr.map(r => {
                     const ten = r.c[1]?.v || "";
-                    // LẤY THƯƠNG HIỆU TỪ CỘT F (CHỈ SỐ 5)
                     const brandFromSheet = r.c[5]?.v ? r.c[5].v.toString().trim().toUpperCase() : "KHÁC";
                     return {
                         ma: r.c[0]?.v ? r.c[0].v.toString().trim() : "", 
@@ -350,32 +373,23 @@
                 }).filter(x => x.ma && x.ma.toLowerCase() !== "mã");
                 
                 // Nạp danh sách bộ lọc
-                const catsSet = new Set();
-                const brandsSet = new Set();
-                products.forEach(p => {
-                    p.cats.forEach(c => catsSet.add(c.trim()));
-                    brandsSet.add(p.brand);
-                });
+                const catsSet = new Set(), brandsSet = new Set();
+                products.forEach(p => { p.cats.forEach(c => catsSet.add(c.trim())); brandsSet.add(p.brand); });
 
-                const catList = Array.from(catsSet).sort();
-                const brandList = Array.from(brandsSet).sort();
+                const catList = Array.from(catsSet).sort(), brandList = Array.from(brandsSet).sort();
 
-                // Nạp Menu con & Select Danh mục
-                const submenu = document.getElementById('submenu-products');
-                const selectCat = document.getElementById('filter-category');
+                const submenu = document.getElementById('submenu-products'), selectCat = document.getElementById('filter-category');
                 catList.forEach(c => {
                     submenu.innerHTML += `<li><a href="#products" onclick="setFilter('cat', '${c}')">${c}</a></li>`;
                     selectCat.innerHTML += `<option value="${c}">${c}</option>`;
                 });
 
-                // Nạp Select Thương hiệu
                 const selectBrand = document.getElementById('filter-brand');
-                brandList.forEach(b => {
-                    selectBrand.innerHTML += `<option value="${b}">${b}</option>`;
-                });
+                brandList.forEach(b => { selectBrand.innerHTML += `<option value="${b}">${b}</option>`; });
 
                 applyFilters();
 
+                // DỰ ÁN
                 const dr = await fetchData('Du_An');
                 allProjects = dr.slice(1).map(r => ({ 
                     ma: r.c[0]?.v ? r.c[0].v.toString().trim() : "", 
@@ -389,8 +403,8 @@
                 allProjects.forEach(pj => pjH += `<div class="proj-card" onclick="openProjModal('${pj.ma}')"><img src="${imgBase}${pj.ma}.jpg"><h4>${pj.ten}</h4></div>`);
                 document.getElementById('project-list').innerHTML = pjH + pjH;
 
-                const searchInp = document.getElementById('product-search');
-                const searchRes = document.getElementById('search-results');
+                // Live Search
+                const searchInp = document.getElementById('product-search'), searchRes = document.getElementById('search-results');
                 searchInp.addEventListener('input', (e) => {
                     const k = e.target.value.toLowerCase().trim();
                     if(k.length < 1) { searchRes.style.display = 'none'; return; }
@@ -415,8 +429,7 @@
 
         function setFilter(type, val) {
             if(type === 'cat') document.getElementById('filter-category').value = val;
-            applyFilters();
-            closeMenu();
+            applyFilters(); closeMenu();
         }
 
         function applyFilters() {
