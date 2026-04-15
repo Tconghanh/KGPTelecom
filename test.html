@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KGP Tech Admin | Quantum Dashboard</title>
+    <title>Hệ Thống Quản Trị KGP CORE | Quantum Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
@@ -13,7 +13,7 @@
         :root {
             --bg-dark: #020617;
             --accent-blue: #38bdf8;
-            --glass: rgba(15, 23, 42, 0.65);
+            --glass: rgba(15, 23, 42, 0.75);
             --border: rgba(255, 255, 255, 0.08);
         }
 
@@ -25,21 +25,17 @@
             overflow: hidden;
         }
 
-        /* Nền động Canvas */
         #bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
             pointer-events: none;
         }
 
-        /* Sidebar Glassmorphism */
         .sidebar {
-            width: 240px;
-            background: rgba(2, 6, 23, 0.8);
+            width: 250px;
+            background: rgba(2, 6, 23, 0.85);
             backdrop-filter: blur(20px);
             border-right: 1px solid var(--border);
             height: 100vh;
@@ -61,7 +57,7 @@
             border: 1px solid transparent;
         }
 
-        .nav-item:hover {
+        .nav-item:hover, .nav-item.active {
             background: rgba(56, 189, 248, 0.1);
             color: var(--accent-blue);
             border-color: rgba(56, 189, 248, 0.2);
@@ -71,10 +67,9 @@
             background: linear-gradient(135deg, rgba(2, 132, 199, 0.4) 0%, rgba(14, 165, 233, 0.1) 100%);
             color: white;
             border-color: var(--accent-blue);
-            box-shadow: 0 0 20px rgba(2, 132, 199, 0.2);
+            box-shadow: 0 0 20px rgba(2, 132, 199, 0.1);
         }
 
-        /* Stat Cards */
         .stat-card {
             background: var(--glass);
             backdrop-filter: blur(15px);
@@ -84,16 +79,10 @@
             transition: all 0.3s ease;
         }
 
-        .stat-card:hover {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.1);
-            transform: translateY(-5px);
-        }
-
         header {
             height: 70px;
-            background: rgba(2, 6, 23, 0.4);
-            backdrop-filter: blur(10px);
+            background: rgba(2, 6, 23, 0.5);
+            backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -101,55 +90,77 @@
             padding: 0 32px;
         }
 
+        .search-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 10px 15px 10px 40px;
+            border-radius: 12px;
+            font-size: 13px;
+            width: 100%;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-blue);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .scroll-container {
+            max-height: calc(100vh - 380px);
+            overflow-y: auto;
+            border-radius: 0 0 20px 20px;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
         iframe {
             width: 100%;
             height: calc(100vh - 70px);
             border: none;
-            background: rgba(255, 255, 255, 0.95); /* Giữ nền sáng cho Sheets dễ đọc */
+            background: white;
         }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
 <body class="flex">
 
-    <!-- CANVAS BACKGROUND -->
     <canvas id="bg-canvas"></canvas>
 
     <!-- SIDEBAR -->
     <aside class="sidebar flex flex-col py-8">
         <div class="px-8 mb-10 flex items-center gap-3">
-            <div class="h-10 w-10 bg-sky-500 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(56,189,248,0.5)]">
-                <i class="fa-solid fa-atom text-white text-xl animate-spin-slow"></i>
+            <div class="h-10 w-10 bg-sky-500 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(56,189,248,0.4)]">
+                <i class="fa-solid fa-microchip text-white text-xl"></i>
             </div>
             <div>
-                <h1 class="font-bold text-white tracking-tighter text-lg">KGP <span class="text-sky-400">CORE</span></h1>
-                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-[0.3em]">Neural System</p>
+                <h1 class="font-bold text-white tracking-tighter text-lg leading-none">KGP <span class="text-sky-400 font-light">CORE</span></h1>
+                <p class="text-[8px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Hệ điều hành dữ liệu</p>
             </div>
         </div>
 
         <nav class="flex-grow">
-            <div onclick="switchTab(this, 'dashboard')" class="nav-item active">
-                <i class="fa-solid fa-gauge-high"></i> Bảng tin
-            </div>
+            <a href="#BangTin" onclick="switchTab(this, 'dashboard')" class="nav-item active">
+                <i class="fa-solid fa-house-signal"></i> Bảng tin
+            </a>
             <div class="px-8 mt-8 mb-2 text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">Cơ sở dữ liệu</div>
-            <div onclick="switchTab(this, '809858153')" class="nav-item">
-                <i class="fa-solid fa-project-diagram"></i> Quản lý Dự án
-            </div>
-            <div onclick="switchTab(this, '895747298')" class="nav-item">
-                <i class="fa-solid fa-microchip"></i> Quản lý Sản phẩm
-            </div>
-            <div onclick="switchTab(this, 'hosting')" class="nav-item">
-                <i class="fa-solid fa-cloud-bolt"></i> Dữ liệu & Hosting
-            </div>
+            <a href="#DuAn" onclick="switchTab(this, '809858153')" class="nav-item">
+                <i class="fa-solid fa-diagram-next"></i> Quản lý Dự án
+            </a>
+            <a href="#SanPham" onclick="switchTab(this, '895747298')" class="nav-item">
+                <i class="fa-solid fa-boxes-packing"></i> Quản lý Sản phẩm
+            </a>
+            <a href="#DuLieu" onclick="switchTab(this, 'hosting')" class="nav-item">
+                <i class="fa-solid fa-cloud-word"></i> Dữ liệu & Hosting
+            </a>
         </nav>
 
-        <div class="mx-6 p-4 rounded-2xl bg-sky-500/5 border border-sky-500/10">
-            <p class="text-[10px] text-sky-500/60 font-bold mb-1 uppercase tracking-widest">Support Line</p>
-            <p class="text-xs font-bold text-white tracking-widest">0844.900.099</p>
+        <div class="mx-6 p-4 rounded-2xl bg-white/5 border border-white/5">
+            <p class="text-[9px] text-slate-500 font-bold mb-1 uppercase tracking-widest">Hỗ trợ kỹ thuật</p>
+            <p class="text-xs font-bold text-sky-400">0844.900.099</p>
         </div>
     </aside>
 
@@ -157,92 +168,96 @@
     <main class="flex-grow flex flex-col relative">
         <header>
             <div class="flex items-center gap-3">
-                <div class="h-2 w-2 bg-sky-500 rounded-full shadow-[0_0_8px_#38bdf8]"></div>
-                <span id="tab-title" class="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">Hệ thống điều khiển</span>
+                <div class="h-2 w-2 bg-emerald-500 rounded-full shadow-[0_0_8px_#10b981]"></div>
+                <span id="tab-title" class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.3em]">Hệ thống đang hoạt động</span>
             </div>
-            <img src="https://raw.githubusercontent.com/Tconghanh/khanggiaphuc.com/main/data/logo.jpg" class="h-10 rounded border border-white/10 shadow-lg">
+            <div class="flex items-center gap-4">
+                <span class="text-[10px] text-slate-500 italic">Phiên bản 4.2 Pro</span>
+                <img src="https://raw.githubusercontent.com/Tconghanh/khanggiaphuc.com/main/data/logo.jpg" class="h-9 rounded shadow-lg border border-white/10">
+            </div>
         </header>
 
         <div id="main-view" class="flex-grow overflow-y-auto">
             
-            <!-- DASHBOARD VIEW -->
+            <!-- BẢNG TIN -->
             <div id="dashboard-ui" class="p-10 max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-                    <div class="stat-card group">
-                        <div class="flex justify-between items-center mb-6">
-                            <i class="fa-solid fa-database text-sky-500 text-3xl opacity-50 group-hover:opacity-100 transition"></i>
-                            <span class="text-[9px] font-bold text-slate-500 tracking-widest">PROJECTS</span>
-                        </div>
-                        <h3 id="stat-projects" class="text-5xl font-black text-white tracking-tighter">...</h3>
-                        <p class="text-slate-500 text-[11px] mt-2 font-medium uppercase tracking-wider">Hồ sơ công trình</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10 text-white">
+                    <div class="stat-card">
+                        <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-4">Tổng số dự án</p>
+                        <h3 id="stat-projects" class="text-5xl font-black tracking-tighter">...</h3>
+                        <div class="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-sky-500 w-2/3 shadow-[0_0_10px_#0ea5e9]"></div></div>
                     </div>
-                    <div class="stat-card group">
-                        <div class="flex justify-between items-center mb-6">
-                            <i class="fa-solid fa-box-open text-emerald-500 text-3xl opacity-50 group-hover:opacity-100 transition"></i>
-                            <span class="text-[9px] font-bold text-slate-500 tracking-widest">PRODUCTS</span>
-                        </div>
-                        <h3 id="stat-products" class="text-5xl font-black text-white tracking-tighter">...</h3>
-                        <p class="text-slate-500 text-[11px] mt-2 font-medium uppercase tracking-wider">Mặt hàng niêm yết</p>
+                    <div class="stat-card">
+                        <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-4">Sản phẩm hiện có</p>
+                        <h3 id="stat-products" class="text-5xl font-black tracking-tighter">...</h3>
+                        <div class="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 w-1/2 shadow-[0_0_10px_#10b981]"></div></div>
                     </div>
-                    <div class="stat-card group">
-                        <div class="flex justify-between items-center mb-6">
-                            <i class="fa-solid fa-server text-amber-500 text-3xl opacity-50 group-hover:opacity-100 transition"></i>
-                            <span class="text-[9px] font-bold text-slate-500 tracking-widest">STORAGE</span>
-                        </div>
-                        <h3 id="stat-storage" class="text-5xl font-black text-white tracking-tighter">...</h3>
-                        <p class="text-slate-500 text-[11px] mt-2 font-medium uppercase tracking-wider">Dung lượng /data</p>
+                    <div class="stat-card">
+                        <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-4">Lưu trữ đám mây</p>
+                        <h3 id="stat-storage" class="text-5xl font-black tracking-tighter">...</h3>
+                        <div class="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-amber-500 w-1/4 shadow-[0_0_10px_#f59e0b]"></div></div>
                     </div>
                 </div>
 
-                <div class="stat-card !bg-slate-900/20 border-dashed">
-                    <h4 class="font-bold text-white mb-6 uppercase tracking-widest text-xs"><i class="fa-solid fa-terminal mr-2 text-sky-400"></i> Terminal Guide</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-[13px] text-slate-400">
-                        <ul class="space-y-4">
-                            <li class="flex gap-3"><span class="text-sky-500">>></span> Thêm dữ liệu vào Google Sheets (Dự án/Sản phẩm)</li>
-                            <li class="flex gap-3"><span class="text-sky-500">>></span> Đặt tên ảnh theo ID để định danh hệ thống</li>
-                        </ul>
-                        <ul class="space-y-4">
-                            <li class="flex gap-3"><span class="text-sky-500">>></span> Tải ảnh lên Hosting, hệ thống tự động thực thi nén AI</li>
-                            <li class="flex gap-3"><span class="text-sky-500">>></span> Sao chép Raw URL để liên kết vào cơ sở dữ liệu Sheets</li>
-                        </ul>
+                <div class="stat-card !bg-transparent border-dashed border-slate-800">
+                    <h4 class="font-bold text-sky-400 mb-6 uppercase tracking-widest text-[11px]"><i class="fa-solid fa-book-open mr-2"></i> Hướng dẫn vận hành nhanh</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-sm text-slate-400">
+                        <div class="space-y-4">
+                            <p><b class="text-slate-200">BƯỚC 1:</b> Cập nhật thông tin vào Google Sheets tại mục <b>Dự án</b> hoặc <b>Sản phẩm</b>.</p>
+                            <p><b class="text-slate-200">BƯỚC 2:</b> Đặt tên ảnh theo ID tương ứng. Ví dụ ID là <code>SP001</code> thì tên ảnh là <code>SP001.jpg</code>.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <p><b class="text-slate-200">BƯỚC 3:</b> Tại tab <b>Dữ liệu</b>, tải ảnh lên. Hệ thống sẽ tự nén AI để đạt tốc độ tải trang nhanh nhất.</p>
+                            <p><b class="text-slate-200">BƯỚC 4:</b> Copy <b>Link RAW</b> của ảnh vừa tải và dán vào cột hình ảnh trong Sheets.</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- HOSTING VIEW -->
+            <!-- DỮ LIỆU & HOSTING -->
             <div id="hosting-ui" class="hidden p-8 max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
                     <div class="stat-card lg:col-span-1">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3 block">Mã xác thực</label>
-                        <input type="password" id="gh-token" class="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-sky-400 outline-none focus:border-sky-500 transition" placeholder="TOKEN">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 block">Mã xác thực Admin</label>
+                        <input type="password" id="gh-token" class="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-sky-400 outline-none focus:border-sky-500 transition text-sm" placeholder="••••••••">
                     </div>
                     <div class="stat-card lg:col-span-3">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3 block">Cloud Upload Terminal</label>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 block">Tải tệp & Tối ưu hóa AI</label>
                         <div class="flex items-center gap-4">
-                            <input type="file" id="gh-file" onchange="updatePath(this)" class="text-xs text-slate-500 flex-grow file:bg-sky-500/20 file:border-sky-500/20 file:rounded-lg file:text-sky-400 file:px-4 file:py-2 file:font-bold file:mr-4 file:cursor-pointer hover:file:bg-sky-500/30">
+                            <input type="file" id="gh-file" onchange="updatePath(this)" class="text-xs text-slate-500 flex-grow file:bg-sky-500 file:border-0 file:rounded-lg file:text-white file:px-4 file:py-2 file:font-bold file:mr-4 cursor-pointer">
                             <input type="hidden" id="gh-path" value="data/">
-                            <button onclick="uploadFile()" class="bg-sky-500 hover:bg-sky-400 text-white px-8 py-2.5 rounded-xl text-xs font-bold transition-all shadow-[0_0_15px_rgba(56,189,248,0.3)]">EXECUTE</button>
+                            <button onclick="uploadFile()" class="bg-sky-500 hover:bg-sky-400 text-white px-8 py-2.5 rounded-xl text-[11px] font-black transition-all shadow-[0_0_15px_rgba(56,189,248,0.3)] uppercase">Thực thi</button>
                         </div>
                         <div id="upload-status" class="hidden mt-3 text-[10px] font-bold uppercase tracking-widest"></div>
                     </div>
                 </div>
 
+                <!-- THANH TÌM KIẾM -->
+                <div class="mb-4 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-500 text-sm"></i>
+                    <input type="text" id="file-search" oninput="filterFiles(this.value)" class="search-input" placeholder="Tìm kiếm tệp tin trong thư mục /data...">
+                </div>
+
                 <div class="stat-card !p-0 overflow-hidden border-white/5">
                     <table class="w-full text-left">
-                        <thead class="bg-white/5 text-[10px] text-slate-500 uppercase tracking-widest">
+                        <thead class="bg-white/5 text-[9px] text-slate-500 uppercase tracking-[0.2em] sticky top-0">
                             <tr>
-                                <th class="p-4 font-bold cursor-pointer" onclick="sortTable('name')">Tên tệp tin</th>
-                                <th class="p-4 font-bold cursor-pointer" onclick="sortTable('size')">Dung lượng</th>
-                                <th class="p-4 font-bold cursor-pointer" onclick="sortTable('type')">Định dạng</th>
+                                <th class="p-4 font-bold cursor-pointer" onclick="sortTable('name')">Tên tệp tin <i class="fa-solid fa-sort"></i></th>
+                                <th class="p-4 font-bold cursor-pointer" onclick="sortTable('size')">Dung lượng <i class="fa-solid fa-sort"></i></th>
+                                <th class="p-4 font-bold">Định dạng</th>
                                 <th class="p-4 font-bold text-right">Thao tác</th>
                             </tr>
                         </thead>
-                        <tbody id="file-list" class="text-sm"></tbody>
                     </table>
+                    <div class="scroll-container">
+                        <table class="w-full text-left">
+                            <tbody id="file-list" class="text-sm"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- IFRAME VIEW -->
+            <!-- GOOGLE SHEETS IFRAME -->
             <div id="iframe-container" class="hidden h-full">
                 <iframe id="main-frame" src=""></iframe>
             </div>
@@ -251,111 +266,91 @@
     </main>
 
     <script>
-        // --- 1. HIỆU ỨNG CANVAS NỀN ĐỘNG ---
+        // --- 1. CANVAS BACKGROUND (Neural Network) ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        const particleCount = 80;
-
         function initCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
-                    size: Math.random() * 2
-                });
-            }
+            for (let i = 0; i < 70; i++) particles.push({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4
+            });
         }
-
         function drawCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(56, 189, 248, 0.5)';
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.4)';
             ctx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
-            
             particles.forEach((p, i) => {
-                p.x += p.vx;
-                p.y += p.vy;
+                p.x += p.vx; p.y += p.vy;
                 if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
-
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2); ctx.fill();
                 for (let j = i + 1; j < particles.length; j++) {
                     const p2 = particles[j];
-                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if (dist < 150) {
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
+                    const d = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (d < 120) { ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); }
                 }
             });
             requestAnimationFrame(drawCanvas);
         }
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-        drawCanvas();
+        initCanvas(); drawCanvas();
+        window.onresize = initCanvas;
 
-        // --- 2. LOGIC HỆ THỐNG ---
+        // --- 2. HỆ THỐNG ĐIỀU KHIỂN ---
         const repo = "Tconghanh/khanggiaphuc.com";
         const sheetId = "1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk";
         let cachedFiles = [];
         let currentSort = { key: '', asc: true };
 
+        // Xử lý Anchor Link khi load trang
+        window.addEventListener('load', () => {
+            const hash = window.location.hash;
+            if (hash === '#DuAn') switchTab(document.querySelector('[href="#DuAn"]'), '809858153');
+            else if (hash === '#SanPham') switchTab(document.querySelector('[href="#SanPham"]'), '895747298');
+            else if (hash === '#DuLieu') switchTab(document.querySelector('[href="#DuLieu"]'), 'hosting');
+            else switchTab(document.querySelector('[href="#BangTin"]'), 'dashboard');
+        });
+
         async function fetchStats() {
             try {
-                const [resProj, resProd, resGH] = await Promise.all([
+                const [rProj, rProd, rGH] = await Promise.all([
                     fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=809858153`),
                     fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=895747298`),
                     fetch(`https://api.github.com/repos/${repo}/contents/data`)
                 ]);
-                const countProj = (await resProj.text()).trim().split('\n').length - 1;
-                const countProd = (await resProd.text()).trim().split('\n').length - 1;
-                const files = await resGH.json();
-                const totalBytes = files.reduce((sum, f) => sum + (f.size || 0), 0);
-
-                document.getElementById('stat-projects').innerText = Math.max(0, countProj);
-                document.getElementById('stat-products').innerText = Math.max(0, countProd);
-                document.getElementById('stat-storage').innerText = (totalBytes / 1024 / 1024).toFixed(1) + " MB";
-            } catch (e) { console.error("API Error"); }
+                document.getElementById('stat-projects').innerText = (await rProj.text()).trim().split('\n').length - 1;
+                document.getElementById('stat-products').innerText = (await rProd.text()).trim().split('\n').length - 1;
+                const files = await rGH.json();
+                const bytes = files.reduce((s, f) => s + (f.size || 0), 0);
+                document.getElementById('stat-storage').innerText = (bytes / 1024 / 1024).toFixed(1) + " MB";
+            } catch (e) { console.error("Lỗi thông số"); }
         }
 
         function switchTab(el, target) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
             
-            const dashboard = document.getElementById('dashboard-ui');
-            const hosting = document.getElementById('hosting-ui');
-            const iframeCont = document.getElementById('iframe-container');
-            const mainFrame = document.getElementById('main-frame');
-
-            dashboard.classList.add('hidden');
-            hosting.classList.add('hidden');
-            iframeCont.classList.add('hidden');
+            document.getElementById('dashboard-ui').classList.add('hidden');
+            document.getElementById('hosting-ui').classList.add('hidden');
+            document.getElementById('iframe-container').classList.add('hidden');
 
             if (target === 'dashboard') {
-                dashboard.classList.remove('hidden');
+                document.getElementById('dashboard-ui').classList.remove('hidden');
                 fetchStats();
             } else if (target === 'hosting') {
-                hosting.classList.remove('hidden');
+                document.getElementById('hosting-ui').classList.remove('hidden');
                 fetchFiles();
             } else {
-                iframeCont.classList.remove('hidden');
-                mainFrame.src = `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal&gid=${target}`;
+                document.getElementById('iframe-container').classList.remove('hidden');
+                document.getElementById('main-frame').src = `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal&gid=${target}`;
             }
         }
 
         async function fetchFiles() {
             const list = document.getElementById('file-list');
-            list.innerHTML = '<tr><td colspan="4" class="p-10 text-center text-slate-500 animate-pulse uppercase tracking-widest text-xs">Accessing Cloud Storage...</td></tr>';
+            list.innerHTML = '<tr><td colspan="4" class="p-10 text-center text-slate-500 animate-pulse uppercase tracking-[0.2em] text-[10px]">Đang đồng bộ đám mây...</td></tr>';
             try {
                 const res = await fetch(`https://api.github.com/repos/${repo}/contents/data?t=${Date.now()}`);
                 const data = await res.json();
@@ -363,29 +358,33 @@
                     name: f.name, size: f.size, type: f.name.split('.').pop().toLowerCase(), path: f.path, sha: f.sha
                 }));
                 renderTable(cachedFiles);
-            } catch (e) { list.innerHTML = 'Connection Error.'; }
+            } catch (e) { list.innerHTML = 'Lỗi kết nối Server.'; }
         }
 
         function renderTable(data) {
             const list = document.getElementById('file-list');
             list.innerHTML = data.map(f => `
                 <tr class="hover:bg-white/5 transition border-b border-white/5">
-                    <td class="p-4 font-bold text-slate-300 text-xs">${f.name}</td>
-                    <td class="p-4 text-slate-500 text-xs font-mono">${(f.size/1024).toFixed(1)} KB</td>
+                    <td class="p-4 font-bold text-slate-300 text-xs w-1/3">${f.name}</td>
+                    <td class="p-4 text-slate-500 text-[11px] font-mono">${(f.size/1024).toFixed(1)} KB</td>
                     <td class="p-4"><span class="bg-sky-500/10 text-sky-400 text-[9px] font-black px-2 py-1 rounded uppercase">${f.type}</span></td>
                     <td class="p-4 text-right">
-                        <button onclick="copyRawUrl('${f.path}')" class="text-sky-500 mr-4 hover:text-white transition font-bold text-[10px]">RAW</button>
-                        <button onclick="renameFile('${f.path}', '${f.sha}')" class="text-amber-500 mr-4 hover:text-white transition font-bold text-[10px]">RENAME</button>
-                        <button onclick="deleteFile('${f.path}', '${f.sha}')" class="text-rose-500 hover:text-white transition font-bold text-[10px]">DELETE</button>
+                        <button onclick="copyUrl('${f.path}')" class="text-sky-500 mr-4 hover:text-white transition font-bold text-[9px]">SAO CHÉP</button>
+                        <button onclick="renameFile('${f.path}', '${f.sha}')" class="text-amber-500 mr-4 hover:text-white transition font-bold text-[9px]">ĐỔI TÊN</button>
+                        <button onclick="deleteFile('${f.path}', '${f.sha}')" class="text-rose-500 hover:text-white transition font-bold text-[9px]">XÓA</button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function copyRawUrl(path) {
-            const url = `https://raw.githubusercontent.com/${repo}/main/${path}`;
-            navigator.clipboard.writeText(url);
-            alert("URL copied to clipboard!");
+        function filterFiles(term) {
+            const filtered = cachedFiles.filter(f => f.name.toLowerCase().includes(term.toLowerCase()));
+            renderTable(filtered);
+        }
+
+        function copyUrl(path) {
+            navigator.clipboard.writeText(`https://raw.githubusercontent.com/${repo}/main/${path}`);
+            alert("Đã sao chép link ảnh!");
         }
 
         async function uploadFile() {
@@ -393,14 +392,11 @@
             const fileInput = document.getElementById('gh-file');
             const path = document.getElementById('gh-path').value;
             const status = document.getElementById('upload-status');
-
-            if(!token || !fileInput.files[0]) return alert("Access Denied!");
-
+            if(!token || !fileInput.files[0]) return alert("Nhập mã Admin!");
             let file = fileInput.files[0];
             status.classList.remove('hidden');
             status.className = "mt-3 text-sky-400 animate-pulse text-[10px]";
-            status.innerText = ">> ENCRYPTING & COMPRESSING DATA...";
-
+            status.innerText = ">> ĐANG NÉN & TỐI ƯU HÓA DỮ LIỆU...";
             try {
                 if (file.type.startsWith('image/')) {
                     file = await imageCompression(file, { maxSizeMB: 0.8, maxWidthOrHeight: 2000, useWebWorker: true });
@@ -414,46 +410,41 @@
                         headers: { 'Authorization': `token ${token}` }
                     });
                     if (check.ok) sha = (await check.json()).sha;
-
                     const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
                         method: 'PUT',
                         headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: `Cloud Upload`, content, sha })
+                        body: JSON.stringify({ message: `CMS Update`, content, sha })
                     });
-
                     if(res.ok) {
                         status.className = "mt-3 text-emerald-500 font-bold text-[10px]";
-                        status.innerText = ">> UPLOAD SUCCESSFUL";
+                        status.innerText = ">> TẢI LÊN THÀNH CÔNG";
                         fetchFiles(); fetchStats();
-                    } else alert("Auth Error!");
+                    } else alert("Mã Admin sai!");
                 };
-            } catch (e) { alert("Error!"); }
+            } catch (e) { alert("Lỗi!"); }
         }
 
         function sortTable(key) {
             if (currentSort.key === key) currentSort.asc = !currentSort.asc;
             else { currentSort.key = key; currentSort.asc = true; }
-            cachedFiles.sort((a, b) => {
-                let v1 = a[key], v2 = b[key];
-                return currentSort.asc ? (v1 > v2 ? 1 : -1) : (v1 < v2 ? 1 : -1);
-            });
+            cachedFiles.sort((a, b) => currentSort.asc ? (a[key] > b[key] ? 1 : -1) : (a[key] < b[key] ? 1 : -1));
             renderTable(cachedFiles);
         }
 
         async function deleteFile(p, sha) {
-            const t = document.getElementById('gh-token').value || prompt("Auth Code:");
-            if(!t || !confirm("Erase data?")) return;
+            const t = document.getElementById('gh-token').value || prompt("Mã Admin:");
+            if(!t || !confirm("Xác nhận xóa tệp?")) return;
             const res = await fetch(`https://api.github.com/repos/${repo}/contents/${p}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `token ${t}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: `Cloud Delete`, sha })
+                body: JSON.stringify({ message: `CMS Delete`, sha })
             });
             if(res.ok) { fetchFiles(); fetchStats(); }
         }
 
         async function renameFile(oldP, sha) {
-            const t = document.getElementById('gh-token').value || prompt("Auth Code:");
-            const newN = prompt("New Filename:");
+            const t = document.getElementById('gh-token').value || prompt("Mã Admin:");
+            const newN = prompt("Tên tệp mới:");
             if(!t || !newN) return;
             const get = await fetch(`https://api.github.com/repos/${repo}/contents/${oldP}`, { headers: { 'Authorization': `token ${t}` } });
             const data = await get.json();
@@ -471,9 +462,7 @@
                 fetchFiles();
             }
         }
-
         function updatePath(i) { if(i.files[0]) document.getElementById('gh-path').value = "data/" + i.files[0].name; }
-        window.onload = fetchStats;
     </script>
 </body>
 </html>
