@@ -20,7 +20,6 @@
 
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-main); color: #1e293b; }
 
-        /* Sidebar hiện đại */
         .sidebar { width: 220px; background: var(--side-bg); transition: all 0.3s; flex-shrink: 0; }
         .nav-link { 
             padding: 12px 20px; color: #94a3b8; display: flex; align-items: center; gap: 12px;
@@ -29,26 +28,20 @@
         .nav-link:hover { background: var(--side-hover); color: white; }
         .nav-link.active { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
 
-        /* Card và UI Components */
         .glass-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .wp-input { 
             border: 1px solid #cbd5e1; padding: 8px 12px; border-radius: 8px; font-size: 13px;
             transition: all 0.2s; outline: none;
         }
-        .wp-input:focus { border-color: var(--accent); ring: 2px ring var(--accent); }
         
         .btn-primary { 
             background: var(--accent); color: white; padding: 8px 20px; border-radius: 8px; 
             font-size: 13px; font-weight: 600; transition: all 0.2s;
         }
-        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        /* Table Styling */
         .custom-table th { background: #f1f5f9; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 20px; }
         .custom-table td { padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
-        .custom-table tr:hover { background: #f8fafc; }
 
-        /* Step Guide */
         .step-icon { width: 40px; height: 40px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     </style>
 </head>
@@ -56,23 +49,22 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar flex flex-col py-6">
-        <div class="px-8 mb-10">
-            <div class="flex items-center gap-3 text-white">
-                <div class="bg-blue-600 p-2 rounded-lg"><i class="fa-solid fa-layer-group"></i></div>
-                <span class="font-bold tracking-tight text-lg">KGP ADMIN</span>
-            </div>
+        <div class="px-8 mb-10 text-white font-bold tracking-tight text-lg flex items-center gap-3">
+            <div class="bg-blue-600 p-2 rounded-lg"><i class="fa-solid fa-layer-group"></i></div>
+            <span>KGP ADMIN</span>
         </div>
         
         <nav class="flex-grow">
             <div onclick="switchTab(this, 'dashboard')" class="nav-link active cursor-pointer">
                 <i class="fa-solid fa-chart-pie"></i> Bảng tin
             </div>
-            <div class="px-8 mt-6 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Quản lý nội dung</div>
+            <div class="px-8 mt-6 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dữ liệu web</div>
             <div onclick="switchTab(this, '809858153')" class="nav-link cursor-pointer">
                 <i class="fa-solid fa-folder-tree"></i> Quản lý Dự án
             </div>
-            <div onclick="switchTab(this, '895747298')" class="nav-link cursor-pointer">
-                <i class="fa-solid fa-boxes-stacked"></i> Quản lý Sản phẩm
+            <!-- TAB SẢN PHẨM ĐÃ ĐỔI SANG BIỂU MẪU -->
+            <div onclick="switchTab(this, 'google-form')" class="nav-link cursor-pointer">
+                <i class="fa-solid fa-boxes-stacked"></i> Thêm Sản phẩm
             </div>
             <div onclick="switchTab(this, 'hosting')" class="nav-link cursor-pointer">
                 <i class="fa-solid fa-server"></i> Dữ liệu & Hosting
@@ -80,8 +72,8 @@
         </nav>
 
         <div class="px-8 mt-auto">
-            <div class="bg-slate-800 rounded-xl p-4">
-                <p class="text-[10px] text-slate-400 uppercase font-bold">Hỗ trợ kỹ thuật</p>
+            <div class="bg-slate-800 rounded-xl p-4 text-[10px] text-slate-400">
+                <p class="uppercase font-bold">Hỗ trợ kỹ thuật</p>
                 <p class="text-white text-xs font-semibold mt-1">0844.900.099</p>
             </div>
         </div>
@@ -89,156 +81,121 @@
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow flex flex-col">
-        <!-- HEADER TOOLBAR -->
         <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8">
-            <div class="flex items-center gap-2">
-                <span class="text-slate-400 text-sm">Trang quản trị</span>
+            <div class="flex items-center gap-2 text-sm">
+                <span class="text-slate-400">KGP System</span>
                 <i class="fa-solid fa-chevron-right text-[10px] text-slate-300"></i>
-                <span id="breadcrumb" class="text-sm font-semibold text-slate-700">Bảng tin</span>
+                <span id="breadcrumb" class="font-semibold text-slate-700">Bảng tin</span>
             </div>
             <div class="flex items-center gap-4">
                 <div class="text-right">
                     <p class="text-xs font-bold text-slate-700">Administrator</p>
-                    <p class="text-[10px] text-green-500 flex items-center justify-end gap-1">
-                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> Trực tuyến
-                    </p>
+                    <p class="text-[10px] text-green-500 flex items-center justify-end gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> Trực tuyến</p>
                 </div>
-                <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" class="w-8 h-8 rounded-full border border-slate-200">
             </div>
         </header>
 
         <div class="p-8 overflow-y-auto flex-grow">
             <div id="view-container" class="max-w-6xl mx-auto">
                 
-                <!-- TAB BẢNG TIN -->
+                <!-- BẢNG TIN -->
                 <div id="dashboard-ui">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div class="glass-card p-6 border-l-4 border-blue-500">
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Hệ thống</p>
-                            <h3 class="text-2xl font-bold mt-1">Hoạt động</h3>
-                            <p class="text-[11px] text-slate-400 mt-2">Máy chủ GitHub: <span class="text-green-500 font-bold">Ổn định</span></p>
-                        </div>
-                        <div class="glass-card p-6 border-l-4 border-purple-500">
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Lưu trữ</p>
-                            <h3 class="text-2xl font-bold mt-1">Không giới hạn</h3>
-                            <p class="text-[11px] text-slate-400 mt-2">Dung lượng sử dụng: <span class="text-slate-700 font-bold">Tối ưu</span></p>
-                        </div>
-                        <div class="glass-card p-6 border-l-4 border-orange-500">
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Phiên bản</p>
-                            <h3 class="text-2xl font-bold mt-1">v4.0 Pro</h3>
-                            <p class="text-[11px] text-slate-400 mt-2">Cập nhật: <span class="text-slate-700 font-bold">Jan 2024</span></p>
-                        </div>
-                    </div>
-
                     <div class="glass-card overflow-hidden">
                         <div class="p-8 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
                             <div>
-                                <h2 class="text-xl font-bold text-slate-800">Hướng dẫn vận hành hệ thống</h2>
-                                <p class="text-sm text-slate-500">Quy trình chuẩn hóa dữ liệu Khang Gia Phúc</p>
+                                <h2 class="text-xl font-bold text-slate-800 uppercase">HƯỚNG DẪN THÊM SẢN PHẨM VÀO TRANG WEB</h2>
+                                <p class="text-sm text-slate-500 mt-1">Vui lòng thực hiện theo các bước dưới đây để dữ liệu đồng bộ chính xác.</p>
                             </div>
-                            <img src="https://raw.githubusercontent.com/Tconghanh/khanggiaphuc.com/main/data/logo.jpg" class="h-14 rounded shadow-sm border border-white">
+                            <img src="https://raw.githubusercontent.com/Tconghanh/khanggiaphuc.com/main/data/logo.jpg" class="h-14 rounded shadow-sm border-2 border-white">
                         </div>
                         
-                        <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <div class="space-y-8">
-                                <div class="flex gap-4">
-                                    <div class="step-icon">01</div>
-                                    <div>
-                                        <h4 class="font-bold text-slate-800">Khởi tạo Sản phẩm</h4>
-                                        <p class="text-xs text-slate-500 leading-relaxed mt-1">Truy cập menu "Quản lý Sản phẩm". Chèn thêm dòng mới ngay bên dưới dòng tiêu đề chính của Google Sheets.</p>
-                                    </div>
-                                </div>
-                                <div class="flex gap-4">
-                                    <div class="step-icon">02</div>
-                                    <div>
-                                        <h4 class="font-bold text-slate-800">Cập nhật Thông tin</h4>
-                                        <p class="text-xs text-slate-500 leading-relaxed mt-1">Nhập đầy đủ ID sản phẩm, Tên, Giá và Danh mục. ID phải là duy nhất để hệ thống nhận diện ảnh.</p>
-                                    </div>
+                        <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="flex gap-4">
+                                <div class="step-icon font-bold">1</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Truy cập mục sản phẩm</h4>
+                                    <p class="text-[13px] text-slate-500 mt-1">Chọn menu <b>"Thêm Sản phẩm"</b> để mở Biểu mẫu nhập liệu của Google.</p>
                                 </div>
                             </div>
-                            <div class="space-y-8">
-                                <div class="flex gap-4">
-                                    <div class="step-icon">03</div>
-                                    <div>
-                                        <h4 class="font-bold text-slate-800">Tải tệp & Tối ưu ảnh</h4>
-                                        <p class="text-xs text-slate-500 leading-relaxed mt-1">Vào phần "Hosting", sử dụng <strong>Mã xác thực</strong> để tải ảnh. Ảnh sẽ tự động được nén chuẩn Squoosh để tăng tốc độ web.</p>
-                                    </div>
+                            <div class="flex gap-4">
+                                <div class="step-icon font-bold">2</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Điền thông tin Biểu mẫu</h4>
+                                    <p class="text-[13px] text-slate-500 mt-1">Nhập ID, Tên, Giá, Danh mục... sau đó bấm Gửi để lưu vào cơ sở dữ liệu.</p>
                                 </div>
-                                <div class="flex gap-4">
-                                    <div class="step-icon">04</div>
-                                    <div>
-                                        <h4 class="font-bold text-slate-800">Kiểm tra hiển thị</h4>
-                                        <p class="text-xs text-slate-500 leading-relaxed mt-1">Sau khi upload và nhập dữ liệu, hãy chờ 30 giây để hệ thống đồng bộ và kiểm tra ngoài trang chủ.</p>
-                                    </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="step-icon font-bold">3</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Tải tệp & Tối ưu ảnh</h4>
+                                    <p class="text-[13px] text-slate-500 mt-1">Sử dụng mục <b>"Hosting"</b> để tải ảnh lên. Nhập Mã xác thực, chọn tệp và bấm TẢI LÊN.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="step-icon font-bold">4</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Quy tắc đặt tên ảnh</h4>
+                                    <p class="text-[13px] text-slate-500 mt-1 italic">Ảnh chính: <b>ID.jpg</b> | Ảnh phụ: <b>ID.1.jpg, ID.2.jpg...</b></p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="p-6 bg-amber-50 mx-8 mb-8 rounded-xl border border-amber-100">
-                            <h5 class="text-amber-800 font-bold text-xs uppercase mb-2 flex items-center gap-2">
-                                <i class="fa-solid fa-triangle-exclamation"></i> Quy tắc đặt tên ảnh quan trọng
-                            </h5>
-                            <div class="grid grid-cols-2 gap-4 text-[12px] text-amber-700 italic">
-                                <div>• Ảnh đại diện: <strong>ID.jpg</strong> (VD: SP001.jpg)</div>
-                                <div>• Ảnh phụ 1-9: <strong>ID.1.jpg</strong> (VD: SP001.1.jpg)</div>
+                        <div class="m-8 p-6 bg-blue-50 border border-blue-100 rounded-xl flex justify-between items-center">
+                            <div>
+                                <h4 class="text-blue-800 font-bold text-sm uppercase">HỖ TRỢ KỸ THUẬT</h4>
+                                <p class="text-xs text-blue-600 mt-1">Hotline: 0844.900.099 | Website: www.khanggiaphuc.com</p>
                             </div>
+                            <i class="fa-solid fa-headset text-4xl text-blue-200"></i>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB IFRAME -->
-                <iframe id="main-frame" class="hidden w-full glass-card h-[calc(100vh-180px)]"></iframe>
+                <!-- IFRAME DÙNG CHUNG CHO SHEETS VÀ GOOGLE FORMS -->
+                <iframe id="main-frame" class="hidden w-full glass-card h-[calc(100vh-180px)]" allow="payment"></iframe>
 
-                <!-- TAB HOSTING -->
+                <!-- HOSTING UI -->
                 <div id="hosting-ui" class="hidden">
                     <div class="glass-card mb-6">
-                        <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-                            <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Cổng tải dữ liệu tối ưu</h3>
+                        <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                            <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Tải tệp & nén ảnh tự động</h3>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-bold">SERVER: DATA/</span>
                         </div>
                         <div class="p-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-                                <div class="md:col-span-1">
-                                    <label class="block text-[11px] font-bold text-slate-500 mb-2 uppercase">Mã xác thực quản trị</label>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 mb-2 uppercase">Mã xác thực quản trị</label>
                                     <div class="relative">
-                                        <i class="fa-solid fa-key absolute left-3 top-3 text-slate-400 text-xs"></i>
-                                        <input type="password" id="gh-token" class="wp-input w-full pl-9" placeholder="Nhập mã token...">
+                                        <i class="fa-solid fa-shield-halved absolute left-3 top-3 text-slate-400 text-xs"></i>
+                                        <input type="password" id="gh-token" class="wp-input w-full pl-9" placeholder="Mã bảo mật...">
                                     </div>
                                 </div>
-                                <div class="md:col-span-1">
-                                    <label class="block text-[11px] font-bold text-slate-500 mb-2 uppercase">Chọn tệp tải lên</label>
-                                    <input type="file" id="gh-file" onchange="updatePath(this)" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 mb-2 uppercase">Chọn tệp (JPG, PNG, PDF...)</label>
+                                    <input type="file" id="gh-file" onchange="updatePath(this)" class="text-xs w-full file:bg-slate-100 file:border-0 file:rounded file:px-3 file:py-1 file:font-bold">
                                     <input type="hidden" id="gh-path" value="data/">
                                 </div>
-                                <div class="md:col-span-1">
+                                <div>
                                     <button onclick="uploadFile()" class="btn-primary w-full py-2.5 flex justify-center items-center gap-2">
-                                        <i class="fa-solid fa-cloud-arrow-up"></i> BẮT ĐẦU TẢI LÊN
+                                        <i class="fa-solid fa-cloud-arrow-up"></i> TẢI LÊN NGAY
                                     </button>
                                 </div>
                             </div>
-                            <div id="upload-status" class="hidden mt-4 p-4 rounded-lg text-xs font-medium"></div>
+                            <div id="upload-status" class="hidden mt-4 p-4 rounded-lg text-xs font-medium border"></div>
                         </div>
                     </div>
 
                     <div class="glass-card overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="custom-table w-full text-left">
-                                <thead>
-                                    <tr>
-                                        <th onclick="sortTable('name')" class="cursor-pointer group">
-                                            Tên tệp <i class="fa-solid fa-sort ml-1 opacity-20 group-hover:opacity-100"></i>
-                                        </th>
-                                        <th onclick="sortTable('size')" class="cursor-pointer group">
-                                            Kích thước <i class="fa-solid fa-sort ml-1 opacity-20 group-hover:opacity-100"></i>
-                                        </th>
-                                        <th onclick="sortTable('type')" class="cursor-pointer group">
-                                            Định dạng <i class="fa-solid fa-sort ml-1 opacity-20 group-hover:opacity-100"></i>
-                                        </th>
-                                        <th class="text-right">Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="file-list"></tbody>
-                            </table>
-                        </div>
+                        <table class="custom-table w-full text-left">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('name')" class="cursor-pointer">Tên tệp <i class="fa-solid fa-sort ml-1"></i></th>
+                                    <th onclick="sortTable('size')" class="cursor-pointer">Size <i class="fa-solid fa-sort ml-1"></i></th>
+                                    <th onclick="sortTable('type')" class="cursor-pointer">Loại <i class="fa-solid fa-sort ml-1"></i></th>
+                                    <th class="text-right">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="file-list"></tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -252,49 +209,44 @@
         let currentSort = { key: '', asc: true };
 
         function switchTab(el, target) {
-            // Update UI Sidebar
             document.querySelectorAll('.nav-link').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
-            
-            // Update Breadcrumb
             document.getElementById('breadcrumb').innerText = el.innerText.trim();
 
-            // Toggle Tabs
             document.getElementById('dashboard-ui').classList.add('hidden');
             document.getElementById('main-frame').classList.add('hidden');
             document.getElementById('hosting-ui').classList.add('hidden');
+
+            const f = document.getElementById('main-frame');
 
             if(target === 'dashboard') {
                 document.getElementById('dashboard-ui').classList.remove('hidden');
             } else if(target === 'hosting') {
                 document.getElementById('hosting-ui').classList.remove('hidden');
                 fetchFiles();
+            } else if(target === 'google-form') {
+                // XỬ LÝ CHÈN GOOGLE FORM
+                f.classList.remove('hidden');
+                f.src = "https://docs.google.com/forms/d/e/1FAIpQLScxoVHD07nQhfM-2IZhmknsPYgfXzhVhZcIZKd1zVK5K4itVA/viewform?embedded=true";
             } else {
-                const f = document.getElementById('main-frame');
+                // XỬ LÝ CHÈN GOOGLE SHEETS
                 f.classList.remove('hidden');
                 f.src = `https://docs.google.com/spreadsheets/d/1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk/edit?rm=minimal&gid=${target}`;
             }
         }
 
-        function updatePath(input) {
-            if (input.files[0]) document.getElementById('gh-path').value = "data/" + input.files[0].name;
-        }
+        // --- CÁC HÀM XỬ LÝ DỮ LIỆU GIỮ NGUYÊN ---
+        function updatePath(input) { if (input.files[0]) document.getElementById('gh-path').value = "data/" + input.files[0].name; }
 
         async function fetchFiles() {
             const list = document.getElementById('file-list');
-            list.innerHTML = '<tr><td colspan="4" class="text-center py-10 italic text-slate-400">Đang truy xuất dữ liệu từ máy chủ...</td></tr>';
+            list.innerHTML = '<tr><td colspan="4" class="text-center py-10 italic text-slate-400">Đang đồng bộ dữ liệu...</td></tr>';
             try {
                 const res = await fetch(`https://api.github.com/repos/${repo}/contents/data?t=${Date.now()}`);
                 const data = await res.json();
-                cachedFiles = data.map(f => ({
-                    name: f.name,
-                    size: f.size,
-                    type: f.name.split('.').pop().toLowerCase(),
-                    path: f.path,
-                    sha: f.sha
-                }));
+                cachedFiles = data.map(f => ({ name: f.name, size: f.size, type: f.name.split('.').pop().toLowerCase(), path: f.path, sha: f.sha }));
                 renderTable(cachedFiles);
-            } catch (e) { list.innerHTML = 'Lỗi kết nối API.'; }
+            } catch (e) { list.innerHTML = 'Không thể kết nối máy chủ.'; }
         }
 
         function renderTable(data) {
@@ -302,20 +254,19 @@
             list.innerHTML = data.map(f => `
                 <tr>
                     <td class="font-semibold text-slate-700">${f.name}</td>
-                    <td class="text-slate-500">${(f.size/1024).toFixed(1)} KB</td>
-                    <td><span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-[10px] font-bold uppercase">${f.type}</span></td>
+                    <td class="text-slate-400 text-xs">${(f.size/1024).toFixed(1)} KB</td>
+                    <td><span class="px-2 py-0.5 bg-slate-100 rounded text-[10px] font-bold uppercase">${f.type}</span></td>
                     <td class="text-right flex justify-end gap-2">
-                        <button onclick="renameFile('${f.path}', '${f.sha}')" class="p-2 hover:bg-orange-50 text-orange-500 rounded-lg transition" title="Đổi tên"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <a href="https://raw.githubusercontent.com/${repo}/main/${f.path}" target="_blank" class="p-2 hover:bg-blue-50 text-blue-500 rounded-lg transition" title="Xem ảnh"><i class="fa-solid fa-eye"></i></a>
-                        <button onclick="deleteFile('${f.path}', '${f.sha}')" class="p-2 hover:bg-red-50 text-red-500 rounded-lg transition" title="Xóa"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="renameFile('${f.path}', '${f.sha}')" class="text-slate-400 hover:text-orange-500"><i class="fa-solid fa-pen"></i></button>
+                        <a href="https://raw.githubusercontent.com/${repo}/main/${f.path}" target="_blank" class="text-slate-400 hover:text-blue-500"><i class="fa-solid fa-eye"></i></a>
+                        <button onclick="deleteFile('${f.path}', '${f.sha}')" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
             `).join('');
         }
 
         function sortTable(key) {
-            if (currentSort.key === key) currentSort.asc = !currentSort.asc;
-            else { currentSort.key = key; currentSort.asc = true; }
+            if (currentSort.key === key) currentSort.asc = !currentSort.asc; else { currentSort.key = key; currentSort.asc = true; }
             const sorted = [...cachedFiles].sort((a, b) => {
                 let v1 = a[key], v2 = b[key];
                 return currentSort.asc ? (v1 > v2 ? 1 : -1) : (v1 < v2 ? 1 : -1);
@@ -328,82 +279,59 @@
             const fileInput = document.getElementById('gh-file');
             const path = document.getElementById('gh-path').value;
             const status = document.getElementById('upload-status');
-
-            if(!token || !fileInput.files[0]) return alert("Vui lòng nhập Mã xác thực và chọn file!");
-
+            if(!token || !fileInput.files[0]) return alert("Nhập Mã xác thực!");
             let file = fileInput.files[0];
             status.classList.remove('hidden');
-            status.className = "mt-4 p-4 rounded-lg bg-blue-50 text-blue-700 text-xs";
-            status.innerText = "⏳ Đang chuẩn bị và nén ảnh tối ưu...";
-
+            status.className = "mt-4 p-4 rounded-lg bg-blue-50 text-blue-700 border-blue-100 border text-xs";
+            status.innerText = "⏳ Đang tối ưu hóa tệp và gửi dữ liệu...";
             try {
                 if (file.type.startsWith('image/')) {
                     file = await imageCompression(file, { maxSizeMB: 0.8, maxWidthOrHeight: 2000, useWebWorker: true });
                 }
-
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onloadend = async () => {
                     const content = reader.result.split(',')[1];
                     let sha = "";
-                    const check = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
+                    const check = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
                     if (check.ok) sha = (await check.json()).sha;
-
                     const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                        method: 'PUT',
-                        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: `CMS Upload`, content, sha })
+                        method: 'PUT', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: `CMS`, content, sha })
                     });
-
                     if(res.ok) {
-                        status.className = "mt-4 p-4 rounded-lg bg-green-100 text-green-700 text-xs font-bold";
-                        status.innerHTML = "✅ Tải lên thành công! Dữ liệu đã sẵn sàng.";
+                        status.className = "mt-4 p-4 rounded-lg bg-green-50 text-green-700 border-green-100 border text-xs font-bold";
+                        status.innerText = "✅ Tải lên và đồng bộ thành công!";
                         fetchFiles();
-                    } else alert("Mã xác thực không hợp lệ!");
+                    } else alert("Mã xác thực không đúng!");
                 };
-            } catch (e) { alert("Lỗi hệ thống!"); }
+            } catch (e) { alert("Lỗi!"); }
         }
 
         async function deleteFile(path, sha) {
-            const token = document.getElementById('gh-token').value || prompt("Nhập mã xác thực để xóa:");
-            if(!token || !confirm("Xác nhận xóa tệp này vĩnh viễn?")) return;
-            try {
-                const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: `CMS Delete`, sha })
-                });
-                if(res.ok) fetchFiles();
-            } catch (e) { alert("Lỗi!"); }
+            const token = document.getElementById('gh-token').value || prompt("Nhập mã xác thực:");
+            if(!token || !confirm("Xóa tệp?")) return;
+            const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+                method: 'DELETE', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: `Del`, sha })
+            });
+            if(res.ok) fetchFiles();
         }
 
         async function renameFile(oldPath, sha) {
             const token = document.getElementById('gh-token').value || prompt("Nhập Mã xác thực:");
-            if(!token) return;
-            const newName = prompt("Nhập tên mới (Ví dụ: SP002.jpg):");
-            if(!newName) return;
-
-            try {
-                const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/${oldPath}`, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                const fileData = await getRes.json();
-                const createRes = await fetch(`https://api.github.com/repos/${repo}/contents/data/${newName}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: `Rename`, content: fileData.content })
-                });
-                if(createRes.ok) {
-                    await fetch(`https://api.github.com/repos/${repo}/contents/${oldPath}`, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: `Remove old`, sha: sha })
-                    });
-                    fetchFiles();
-                }
-            } catch (e) { alert("Lỗi đổi tên!"); }
+            const newName = prompt("Tên mới (VD: SP001.jpg):");
+            if(!token || !newName) return;
+            const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/${oldPath}`, { headers: { 'Authorization': `token ${token}` } });
+            const fileData = await getRes.json();
+            const createRes = await fetch(`https://api.github.com/repos/${repo}/contents/data/${newName}`, {
+                method: 'PUT', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: `Ren`, content: fileData.content })
+            });
+            if(createRes.ok) {
+                await fetch(`https://api.github.com/repos/${repo}/contents/${oldPath}`, { method: 'DELETE', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Rem`, sha }) });
+                fetchFiles();
+            }
         }
     </script>
 </body>
