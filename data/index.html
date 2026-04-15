@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tconghanh | Ultimate Windows Toolkit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0078d4;
+            --accent: #00f2fe;
+            --bg-dark: #030305;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text: #ffffff;
+            --sub-text: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text); overflow-x: hidden; min-height: 100vh; line-height: 1.6; }
+
+        /* Hiệu ứng nền */
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at top right, #1a1a2e 0%, #030305 100%); }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+
+        header { text-align: center; margin-bottom: 50px; animation: fadeInUp 0.8s ease; }
+        header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { color: var(--sub-text); font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+
+        /* Card Styling */
+        .card {
+            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--glass-border);
+            border-radius: 28px; padding: 30px; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .card:hover { transform: translateY(-8px); border-color: var(--accent); background: rgba(255, 255, 255, 0.07); box-shadow: 0 20px 40px rgba(0, 242, 254, 0.15); }
+        .card h2 { font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; }
+        .card h2 i { color: var(--accent); }
+        .card p { color: var(--sub-text); font-size: 0.85rem; margin-bottom: 20px; }
+
+        /* PowerShell Section */
+        .ps-section { grid-column: 1 / -1; background: linear-gradient(145deg, rgba(0, 120, 212, 0.1), rgba(0, 0, 0, 0.3)); }
+        .cmd-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+        .cmd-box { 
+            background: #000; border: 1px solid #333; padding: 15px; border-radius: 12px;
+            font-family: 'Consolas', monospace; font-size: 0.85rem; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; transition: 0.3s;
+        }
+        .cmd-box:hover { border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); }
+        .cmd-box span { color: #00ff88; }
+
+        /* Explorer Section */
+        .explorer-section { grid-column: 1 / -1; margin-top: 30px; }
+        .explorer-window { background: rgba(10, 10, 15, 0.8); border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.6); }
+        .exp-header { padding: 18px 30px; background: rgba(255,255,255,0.03); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); }
+        .exp-path { background: rgba(0,0,0,0.4); padding: 6px 15px; border-radius: 8px; font-size: 0.75rem; color: #777; border: 1px solid #222; }
+        
+        .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 30px; }
+        .file-item { 
+            display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; 
+            border-radius: 18px; transition: 0.3s; text-decoration: none; color: #fff; text-align: center; border: 1px solid transparent;
+        }
+        .file-item:hover { background: rgba(255,255,255,0.05); border-color: var(--glass-border); transform: scale(1.05); }
+        .file-item i { font-size: 2.8rem; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
+        .file-item span { font-size: 0.8rem; font-weight: 600; color: #ddd; word-break: break-all; }
+        .file-size { font-size: 0.7rem; color: #555; }
+
+        /* Icon Colors */
+        .fa-folder { color: #ffca28; }
+        .fa-compact-disc { color: #b0bec5; }
+        .fa-file-archive { color: #ba68c8; }
+        .fa-file-code { color: #4fc3f7; }
+        .fa-file-pdf { color: #ff4d4d; }
+        .fa-image { color: #4caf50; }
+
+        /* Buttons */
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 14px; font-weight: 700; font-size: 0.85rem; text-decoration: none; transition: 0.3s; gap: 8px; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-outline { border: 1px solid var(--glass-border); color: #fff; background: rgba(255,255,255,0.02); }
+        .btn-soft { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff; }
+        .btn:hover { filter: brightness(1.2); }
+
+        #toast { visibility: hidden; min-width: 200px; background: #fff; color: #000; text-align: center; border-radius: 12px; padding: 15px; position: fixed; z-index: 1000; left: 50%; bottom: 40px; transform: translateX(-50%); font-weight: 800; }
+        #toast.show { visibility: visible; animation: slideUp 0.4s forwards, fadeOut 0.4s 2.5s forwards; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { bottom: 0; opacity: 0; } to { bottom: 40px; opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <div class="container">
+        <header>
+            <h1>TCONGHANH TOOLS</h1>
+            <p>Windows & Web Professional Manager</p>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <h2><i class="fas fa-table"></i> Data Quản Lý</h2>
+                <p>Hệ thống quản lý dữ liệu trực tuyến qua Google Sheets.</p>
+                <a href="https://docs.google.com/spreadsheets/d/1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk" target="_blank" class="btn btn-outline">Mở Sheets</a>
+            </div>
+
+            <div class="card">
+                <h2><i class="fab fa-github"></i> Github Data</h2>
+                <p>Quản lý mã nguồn và kho ảnh trực tiếp qua Github Dev.</p>
+                <a href="https://github.dev/Tconghanh/khanggiaphuc.com/" target="_blank" class="btn btn-outline">Mở Github</a>
+            </div>
+
+            <div class="card" style="border-top: 4px solid #ff416c;">
+                <h2><i class="fas fa-box-open"></i> HTCG Soft</h2>
+                <p>Kho phần mềm tổng hợp đầy đủ dành cho kỹ thuật viên.</p>
+                <a href="https://htcg.vn/soft/" target="_blank" class="btn btn-soft">Tải Phần Mềm</a>
+            </div>
+
+            <div class="card">
+                <h2><i class="fab fa-windows"></i> Microsoft ISO</h2>
+                <p>Tải Windows 10, 11 chính chủ từ Microsoft.</p>
+                <a href="https://www.microsoft.com/software-download/" target="_blank" class="btn btn-primary">Tải ISO</a>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-briefcase"></i> DLC Boot</h2>
+                <p>Công cụ cứu hộ đa năng nổi tiếng (Trần Duy Linh).</p>
+                <a href="https://dlcboot.com/" target="_blank" class="btn btn-outline">Vào Website</a>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-tools"></i> Anhdv Boot</h2>
+                <p>Bộ WinPE cứu hộ ổn định và tương thích cao.</p>
+                <a href="https://anhdvboot.com/" target="_blank" class="btn btn-outline">Vào Website</a>
+            </div>
+
+            <!-- PowerShell Scripts -->
+            <div class="card ps-section">
+                <h2 style="margin-bottom: 15px;"><i class="fas fa-terminal"></i> PowerShell Automation (Click để Copy)</h2>
+                <div class="cmd-group">
+                    <div class="cmd-box" onclick="copyText('iex (irm https://get.activated.win)')">
+                        <span>iex (irm https://get.activated.win)</span><i class="far fa-copy"></i>
+                    </div>
+                    <div class="cmd-box" onclick="copyText('& ([scriptblock]::Create((irm https://debloat.raphi.re/)))')">
+                        <span>& ([scriptblock]::Create((irm https://debloat.raphi.re/)))</span><i class="far fa-copy"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Local Explorer -->
+            <div class="explorer-section">
+                <div class="explorer-window">
+                    <div class="exp-header">
+                        <h2><i class="fas fa-hdd" style="color: var(--accent);"></i> Local File Explorer</h2>
+                        <div class="exp-path">This PC > Local Toolkit > Software</div>
+                    </div>
+                    <div class="file-grid" id="fileContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">Đã sao chép lệnh thành công!</div>
+
+    <script src="data.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        function renderFiles() {
+            const container = document.getElementById('fileContainer');
+            if (typeof myFiles === 'undefined' || myFiles.length === 0) {
+                container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:40px; color:#444;">Chưa có dữ liệu. Hãy chạy Update.ps1!</p>';
+                return;
+            }
+
+            const imgExts = ['jpg','jpeg','png','gif','webp','svg','bmp'];
+            
+            // Sắp xếp: Không phải ảnh lên trước (A-Z), Ảnh xuống sau (A-Z)
+            const sorted = [...myFiles].sort((a, b) => {
+                const extA = a.name.split('.').pop().toLowerCase();
+                const extB = b.name.split('.').pop().toLowerCase();
+                const isImgA = imgExts.includes(extA);
+                const isImgB = imgExts.includes(extB);
+                if (!isImgA && isImgB) return -1;
+                if (isImgA && !isImgB) return 1;
+                return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+            });
+
+            container.innerHTML = sorted.map(file => {
+                const ext = file.name.split('.').pop().toLowerCase();
+                let icon = 'fa-file';
+                if(file.type === 'folder') icon = 'fa-folder';
+                else if(ext === 'pdf') icon = 'fa-file-pdf';
+                else if(ext === 'iso') icon = 'fa-compact-disc';
+                else if(['zip','rar','7z'].includes(ext)) icon = 'fa-file-archive';
+                else if(ext === 'exe' || ext === 'msi') icon = 'fa-file-code';
+                else if(imgExts.includes(ext)) icon = 'fa-image';
+
+                return `
+                    <a href="${file.link}" class="file-item" target="_blank">
+                        <i class="fas ${icon}"></i>
+                        <span>${file.name}</span>
+                        <div class="file-size">${file.size}</div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        renderFiles();
+        particlesJS("particles-js", { "particles": { "number": { "value": 50 }, "color": { "value": "#00f2fe" }, "opacity": { "value": 0.1 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2fe", "opacity": 0.05 } } });
+        function copyText(text) { navigator.clipboard.writeText(text).then(() => { const t = document.getElementById("toast"); t.className = "show"; setTimeout(() => { t.className = ""; }, 3000); }); }
+    </script>
+</body>
+</html>
