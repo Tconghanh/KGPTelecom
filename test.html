@@ -3,127 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quản Trị KGP CORE | Quantum Dashboard</title>
+    <title>KGP CORE v4.5 | Quantum Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        :root { --bg: #020617; --accent: #38bdf8; --glass: rgba(15, 23, 42, 0.7); --border: rgba(255, 255, 255, 0.06); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: #f8fafc; margin: 0; overflow: hidden; }
         
-        :root {
-            --bg-dark: #020617;
-            --accent-blue: #38bdf8;
-            --glass: rgba(15, 23, 42, 0.75);
-            --border: rgba(255, 255, 255, 0.08);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: #e2e8f0;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        #bg-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .sidebar {
-            width: 250px;
-            background: rgba(2, 6, 23, 0.85);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--border);
-            height: 100vh;
-            z-index: 10;
-        }
-
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
+        .sidebar { width: 260px; background: rgba(2, 6, 23, 0.9); backdrop-filter: blur(25px); border-right: 1px solid var(--border); height: 100vh; z-index: 50; }
+        
         .nav-item {
-            margin: 8px 16px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 13px;
-            font-weight: 500;
-            color: #94a3b8;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 1px solid transparent;
+            margin: 6px 16px; padding: 12px 18px; border-radius: 14px; display: flex; align-items: center; gap: 12px;
+            font-size: 13px; font-weight: 600; color: #94a3b8; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border: 1px solid transparent;
         }
+        .nav-item:hover, .nav-item.active { background: rgba(56, 189, 248, 0.08); color: var(--accent); border-color: rgba(56, 189, 248, 0.15); }
+        .nav-item.active { background: linear-gradient(135deg, rgba(2, 132, 199, 0.3) 0%, rgba(14, 165, 233, 0.05) 100%); color: #fff; border-color: var(--accent); box-shadow: 0 0 20px rgba(56, 189, 248, 0.1); }
 
-        .nav-item:hover, .nav-item.active {
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-blue);
-            border-color: rgba(56, 189, 248, 0.2);
-        }
+        .stat-card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 24px; padding: 28px; position: relative; overflow: hidden; transition: all 0.4s ease; }
+        .stat-card::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent); pointer-events: none; }
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
 
-        .nav-item.active {
-            background: linear-gradient(135deg, rgba(2, 132, 199, 0.4) 0%, rgba(14, 165, 233, 0.1) 100%);
-            color: white;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 20px rgba(2, 132, 199, 0.1);
-        }
+        .search-box { background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); border-radius: 16px; padding: 12px 18px 12px 45px; width: 100%; color: #fff; font-size: 13px; transition: all 0.3s; outline: none; }
+        .search-box:focus { border-color: var(--accent); background: rgba(0, 0, 0, 0.6); box-shadow: 0 0 15px rgba(56, 189, 248, 0.1); }
 
-        .stat-card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            transition: all 0.3s ease;
-        }
-
-        header {
-            height: 70px;
-            background: rgba(2, 6, 23, 0.5);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 32px;
-        }
-
-        .search-input {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 10px 15px 10px 40px;
-            border-radius: 12px;
-            font-size: 13px;
-            width: 100%;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .search-input:focus {
-            border-color: var(--accent-blue);
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .scroll-container {
-            max-height: calc(100vh - 380px);
-            overflow-y: auto;
-            border-radius: 0 0 20px 20px;
-        }
-
+        .file-scroll { max-height: calc(100vh - 420px); overflow-y: auto; scroll-behavior: smooth; }
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+        ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 10px; }
 
-        iframe {
-            width: 100%;
-            height: calc(100vh - 70px);
-            border: none;
-            background: white;
-        }
+        iframe { width: 100%; height: calc(100vh - 70px); border: none; background: #fff; }
+        header { height: 70px; background: rgba(2, 6, 23, 0.6); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); padding: 0 35px; display: flex; align-items: center; justify-content: space-between; }
     </style>
 </head>
 <body class="flex">
@@ -132,35 +43,35 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar flex flex-col py-8">
-        <div class="px-8 mb-10 flex items-center gap-3">
-            <div class="h-10 w-10 bg-sky-500 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(56,189,248,0.4)]">
-                <i class="fa-solid fa-microchip text-white text-xl"></i>
+        <div class="px-8 mb-12 flex items-center gap-4">
+            <div class="h-11 w-11 bg-sky-500 rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(56,189,248,0.4)]">
+                <i class="fa-solid fa-microchip text-white text-2xl"></i>
             </div>
             <div>
-                <h1 class="font-bold text-white tracking-tighter text-lg leading-none">KGP <span class="text-sky-400 font-light">CORE</span></h1>
-                <p class="text-[8px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Hệ điều hành dữ liệu</p>
+                <h1 class="font-extrabold text-white tracking-tighter text-xl leading-none italic">KGP <span class="text-sky-400 font-light">CORE</span></h1>
+                <p class="text-[8px] text-slate-500 font-bold uppercase tracking-[0.4em] mt-1">Hệ điều hành v4.5</p>
             </div>
         </div>
 
         <nav class="flex-grow">
-            <a href="#BangTin" onclick="switchTab(this, 'dashboard')" class="nav-item active">
-                <i class="fa-solid fa-house-signal"></i> Bảng tin
-            </a>
-            <div class="px-8 mt-8 mb-2 text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">Cơ sở dữ liệu</div>
-            <a href="#DuAn" onclick="switchTab(this, '809858153')" class="nav-item">
-                <i class="fa-solid fa-diagram-next"></i> Quản lý Dự án
-            </a>
-            <a href="#SanPham" onclick="switchTab(this, '895747298')" class="nav-item">
-                <i class="fa-solid fa-boxes-packing"></i> Quản lý Sản phẩm
-            </a>
-            <a href="#DuLieu" onclick="switchTab(this, 'hosting')" class="nav-item">
-                <i class="fa-solid fa-cloud-word"></i> Dữ liệu & Hosting
-            </a>
+            <div onclick="switchTab(this, 'BangTin', 'dashboard')" id="nav-BangTin" class="nav-item">
+                <i class="fa-solid fa-house-medical-flag"></i> Bảng tin
+            </div>
+            <div class="px-9 mt-10 mb-3 text-[10px] font-bold text-slate-600 uppercase tracking-[0.3em]">Cơ sở dữ liệu</div>
+            <div onclick="switchTab(this, 'DuAn', '809858153')" id="nav-DuAn" class="nav-item">
+                <i class="fa-solid fa-diagram-project"></i> Quản lý Dự án
+            </div>
+            <div onclick="switchTab(this, 'SanPham', '895747298')" id="nav-SanPham" class="nav-item">
+                <i class="fa-solid fa-boxes-stacked"></i> Quản lý Sản phẩm
+            </div>
+            <div onclick="switchTab(this, 'DuLieu', 'hosting')" id="nav-DuLieu" class="nav-item">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Dữ liệu & Hosting
+            </div>
         </nav>
 
-        <div class="mx-6 p-4 rounded-2xl bg-white/5 border border-white/5">
-            <p class="text-[9px] text-slate-500 font-bold mb-1 uppercase tracking-widest">Hỗ trợ kỹ thuật</p>
-            <p class="text-xs font-bold text-sky-400">0844.900.099</p>
+        <div class="mx-6 p-5 rounded-3xl bg-sky-500/5 border border-sky-500/10">
+            <p class="text-[9px] text-slate-500 font-bold mb-1 uppercase">Support</p>
+            <p class="text-[13px] font-black text-white">0844.900.099</p>
         </div>
     </aside>
 
@@ -168,96 +79,95 @@
     <main class="flex-grow flex flex-col relative">
         <header>
             <div class="flex items-center gap-3">
-                <div class="h-2 w-2 bg-emerald-500 rounded-full shadow-[0_0_8px_#10b981]"></div>
-                <span id="tab-title" class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.3em]">Hệ thống đang hoạt động</span>
+                <div class="h-2 w-2 bg-sky-400 rounded-full animate-pulse shadow-[0_0_10px_#38bdf8]"></div>
+                <span id="tab-label" class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.3em]">System Dashboard</span>
             </div>
-            <div class="flex items-center gap-4">
-                <span class="text-[10px] text-slate-500 italic">Phiên bản 4.2 Pro</span>
-                <img src="https://raw.githubusercontent.com/Tconghanh/khanggiaphuc.com/main/data/logo.jpg" class="h-9 rounded shadow-lg border border-white/10">
-            </div>
+            <img src="https://raw.githubusercontent.com/Tconghanh/khanggiaphuc.com/main/data/logo.jpg" class="h-10 rounded-xl border border-white/5 shadow-2xl">
         </header>
 
-        <div id="main-view" class="flex-grow overflow-y-auto">
+        <div id="view-port" class="flex-grow overflow-y-auto">
             
-            <!-- BẢNG TIN -->
-            <div id="dashboard-ui" class="p-10 max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10 text-white">
+            <!-- DASHBOARD -->
+            <div id="dashboard-ui" class="p-10 max-w-7xl mx-auto hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
                     <div class="stat-card">
-                        <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-4">Tổng số dự án</p>
-                        <h3 id="stat-projects" class="text-5xl font-black tracking-tighter">...</h3>
-                        <div class="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-sky-500 w-2/3 shadow-[0_0_10px_#0ea5e9]"></div></div>
+                        <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-5">Hồ sơ dự án</p>
+                        <h3 id="stat-projects" class="text-6xl font-black text-white tracking-tighter italic">...</h3>
+                        <p class="text-[11px] text-sky-500/60 mt-4 font-bold tracking-widest">REAL-TIME DATA</p>
                     </div>
                     <div class="stat-card">
-                        <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-4">Sản phẩm hiện có</p>
-                        <h3 id="stat-products" class="text-5xl font-black tracking-tighter">...</h3>
-                        <div class="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 w-1/2 shadow-[0_0_10px_#10b981]"></div></div>
+                        <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-5">Danh mục sản phẩm</p>
+                        <h3 id="stat-products" class="text-6xl font-black text-white tracking-tighter italic">...</h3>
+                        <p class="text-[11px] text-emerald-500/60 mt-4 font-bold tracking-widest">ACTIVE ITEMS</p>
                     </div>
                     <div class="stat-card">
-                        <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-4">Lưu trữ đám mây</p>
-                        <h3 id="stat-storage" class="text-5xl font-black tracking-tighter">...</h3>
-                        <div class="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-amber-500 w-1/4 shadow-[0_0_10px_#f59e0b]"></div></div>
+                        <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-5">Bộ nhớ lưu trữ</p>
+                        <h3 id="stat-storage" class="text-6xl font-black text-white tracking-tighter italic">...</h3>
+                        <p class="text-[11px] text-amber-500/60 mt-4 font-bold tracking-widest">HOSTING /DATA</p>
                     </div>
                 </div>
 
                 <div class="stat-card !bg-transparent border-dashed border-slate-800">
-                    <h4 class="font-bold text-sky-400 mb-6 uppercase tracking-widest text-[11px]"><i class="fa-solid fa-book-open mr-2"></i> Hướng dẫn vận hành nhanh</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-sm text-slate-400">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i class="fa-solid fa-terminal text-sky-500"></i>
+                        <h4 class="font-bold text-white uppercase tracking-widest text-[11px]">Hướng dẫn vận hành</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-[13px] text-slate-400 leading-relaxed">
                         <div class="space-y-4">
-                            <p><b class="text-slate-200">BƯỚC 1:</b> Cập nhật thông tin vào Google Sheets tại mục <b>Dự án</b> hoặc <b>Sản phẩm</b>.</p>
-                            <p><b class="text-slate-200">BƯỚC 2:</b> Đặt tên ảnh theo ID tương ứng. Ví dụ ID là <code>SP001</code> thì tên ảnh là <code>SP001.jpg</code>.</p>
+                            <p><span class="text-sky-400 font-bold">01.</span> Nhập liệu tại tab <b class="text-white">Dự án/Sản phẩm</b>. Chỉ đếm các dòng có ID.</p>
+                            <p><span class="text-sky-400 font-bold">02.</span> Đặt tên tệp ảnh trùng khớp với <b class="text-white">ID sản phẩm</b>.</p>
                         </div>
                         <div class="space-y-4">
-                            <p><b class="text-slate-200">BƯỚC 3:</b> Tại tab <b>Dữ liệu</b>, tải ảnh lên. Hệ thống sẽ tự nén AI để đạt tốc độ tải trang nhanh nhất.</p>
-                            <p><b class="text-slate-200">BƯỚC 4:</b> Copy <b>Link RAW</b> của ảnh vừa tải và dán vào cột hình ảnh trong Sheets.</p>
+                            <p><span class="text-sky-400 font-bold">03.</span> Tải tệp lên tại mục <b class="text-white">Dữ liệu</b>, mã xác thực đã cấp qua mail.</p>
+                            <p><span class="text-sky-400 font-bold">04.</span> Sử dụng chức năng <b class="text-white">SAO CHÉP URL</b> để liên kết ảnh vào Sheets.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- DỮ LIỆU & HOSTING -->
+            <!-- HOSTING -->
             <div id="hosting-ui" class="hidden p-8 max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
                     <div class="stat-card lg:col-span-1">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 block">Mã xác thực Admin</label>
-                        <input type="password" id="gh-token" class="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-sky-400 outline-none focus:border-sky-500 transition text-sm" placeholder="••••••••">
+                        <label class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-3 block">Mã xác thực Admin</label>
+                        <input type="password" id="gh-token" class="w-full bg-black/40 border border-white/5 rounded-2xl p-3 text-sky-400 outline-none focus:border-sky-400 transition" placeholder="••••••••">
                     </div>
                     <div class="stat-card lg:col-span-3">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 block">Tải tệp & Tối ưu hóa AI</label>
+                        <label class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-3 block">Cổng tải tệp AI Optimized</label>
                         <div class="flex items-center gap-4">
-                            <input type="file" id="gh-file" onchange="updatePath(this)" class="text-xs text-slate-500 flex-grow file:bg-sky-500 file:border-0 file:rounded-lg file:text-white file:px-4 file:py-2 file:font-bold file:mr-4 cursor-pointer">
+                            <input type="file" id="gh-file" onchange="updatePath(this)" class="text-xs text-slate-500 flex-grow file:bg-sky-500 file:border-0 file:rounded-xl file:text-white file:px-5 file:py-2 file:font-bold file:mr-4 cursor-pointer">
                             <input type="hidden" id="gh-path" value="data/">
-                            <button onclick="uploadFile()" class="bg-sky-500 hover:bg-sky-400 text-white px-8 py-2.5 rounded-xl text-[11px] font-black transition-all shadow-[0_0_15px_rgba(56,189,248,0.3)] uppercase">Thực thi</button>
+                            <button onclick="uploadFile()" class="bg-sky-500 hover:bg-sky-400 text-white px-10 py-3 rounded-2xl text-[10px] font-black transition-all shadow-lg shadow-sky-900/20 uppercase tracking-widest">Tải lên</button>
                         </div>
-                        <div id="upload-status" class="hidden mt-3 text-[10px] font-bold uppercase tracking-widest"></div>
+                        <div id="upload-status" class="hidden mt-3 text-[10px] font-bold tracking-widest uppercase"></div>
                     </div>
                 </div>
 
-                <!-- THANH TÌM KIẾM -->
-                <div class="mb-4 relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-500 text-sm"></i>
-                    <input type="text" id="file-search" oninput="filterFiles(this.value)" class="search-input" placeholder="Tìm kiếm tệp tin trong thư mục /data...">
+                <div class="mb-6 relative group">
+                    <i class="fa-solid fa-magnifying-glass absolute left-5 top-4 text-slate-500 group-hover:text-sky-400 transition"></i>
+                    <input type="text" id="file-search" oninput="filterFiles(this.value)" class="search-box" placeholder="Tìm kiếm tệp tin trong hệ thống Cloud...">
                 </div>
 
                 <div class="stat-card !p-0 overflow-hidden border-white/5">
                     <table class="w-full text-left">
-                        <thead class="bg-white/5 text-[9px] text-slate-500 uppercase tracking-[0.2em] sticky top-0">
+                        <thead class="bg-white/5 text-[9px] text-slate-500 uppercase tracking-widest sticky top-0">
                             <tr>
-                                <th class="p-4 font-bold cursor-pointer" onclick="sortTable('name')">Tên tệp tin <i class="fa-solid fa-sort"></i></th>
-                                <th class="p-4 font-bold cursor-pointer" onclick="sortTable('size')">Dung lượng <i class="fa-solid fa-sort"></i></th>
-                                <th class="p-4 font-bold">Định dạng</th>
-                                <th class="p-4 font-bold text-right">Thao tác</th>
+                                <th class="p-5 font-bold cursor-pointer" onclick="sortTable('name')">Tên tệp</th>
+                                <th class="p-5 font-bold cursor-pointer" onclick="sortTable('size')">Dung lượng</th>
+                                <th class="p-5 font-bold">Định dạng</th>
+                                <th class="p-5 font-bold text-right">Thao tác</th>
                             </tr>
                         </thead>
                     </table>
-                    <div class="scroll-container">
+                    <div class="file-scroll">
                         <table class="w-full text-left">
-                            <tbody id="file-list" class="text-sm"></tbody>
+                            <tbody id="file-list" class="text-[13px]"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- GOOGLE SHEETS IFRAME -->
+            <!-- IFRAME -->
             <div id="iframe-container" class="hidden h-full">
                 <iframe id="main-frame" src=""></iframe>
             </div>
@@ -266,53 +176,71 @@
     </main>
 
     <script>
-        // --- 1. CANVAS BACKGROUND (Neural Network) ---
+        // --- NỀN ĐỘNG ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
         function initCanvas() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             particles = [];
-            for (let i = 0; i < 70; i++) particles.push({
-                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4
-            });
+            for (let i = 0; i < 60; i++) particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3 });
         }
         function drawCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(56, 189, 248, 0.4)';
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.3)';
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.03)';
             particles.forEach((p, i) => {
                 p.x += p.vx; p.y += p.vy;
                 if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI * 2); ctx.fill();
                 for (let j = i + 1; j < particles.length; j++) {
-                    const p2 = particles[j];
-                    const d = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if (d < 120) { ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); }
+                    const d = Math.hypot(p.x - particles[j].x, p.y - particles[j].y);
+                    if (d < 150) { ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke(); }
                 }
             });
             requestAnimationFrame(drawCanvas);
         }
-        initCanvas(); drawCanvas();
-        window.onresize = initCanvas;
+        initCanvas(); drawCanvas(); window.onresize = initCanvas;
 
-        // --- 2. HỆ THỐNG ĐIỀU KHIỂN ---
+        // --- HỆ THỐNG QUẢN TRỊ ---
         const repo = "Tconghanh/khanggiaphuc.com";
         const sheetId = "1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk";
         let cachedFiles = [];
         let currentSort = { key: '', asc: true };
 
-        // Xử lý Anchor Link khi load trang
+        // Xử lý Anchor Link & Switch Tab
+        function switchTab(el, hash, gid) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            if(el) el.classList.add('active');
+            else document.getElementById(`nav-${hash}`).classList.add('active');
+
+            window.location.hash = hash;
+            document.getElementById('dashboard-ui').classList.add('hidden');
+            document.getElementById('hosting-ui').classList.add('hidden');
+            document.getElementById('iframe-container').classList.add('hidden');
+
+            if(hash === 'BangTin') {
+                document.getElementById('dashboard-ui').classList.remove('hidden');
+                fetchStats();
+            } else if(hash === 'DuLieu') {
+                document.getElementById('hosting-ui').classList.remove('hidden');
+                fetchFiles();
+            } else {
+                document.getElementById('iframe-container').classList.remove('hidden');
+                document.getElementById('main-frame').src = `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal&gid=${gid}`;
+            }
+        }
+
         window.addEventListener('load', () => {
-            const hash = window.location.hash;
-            if (hash === '#DuAn') switchTab(document.querySelector('[href="#DuAn"]'), '809858153');
-            else if (hash === '#SanPham') switchTab(document.querySelector('[href="#SanPham"]'), '895747298');
-            else if (hash === '#DuLieu') switchTab(document.querySelector('[href="#DuLieu"]'), 'hosting');
-            else switchTab(document.querySelector('[href="#BangTin"]'), 'dashboard');
+            const h = window.location.hash.replace('#', '');
+            if(h === 'DuAn') switchTab(null, 'DuAn', '809858153');
+            else if(h === 'SanPham') switchTab(null, 'SanPham', '895747298');
+            else if(h === 'DuLieu') switchTab(null, 'DuLieu', 'hosting');
+            else switchTab(null, 'BangTin', 'dashboard');
         });
 
+        // HÀM ĐẾM CHÍNH XÁC (LOẠI BỎ DÒNG TRỐNG)
         async function fetchStats() {
             try {
                 const [rProj, rProd, rGH] = await Promise.all([
@@ -320,37 +248,32 @@
                     fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=895747298`),
                     fetch(`https://api.github.com/repos/${repo}/contents/data`)
                 ]);
-                document.getElementById('stat-projects').innerText = (await rProj.text()).trim().split('\n').length - 1;
-                document.getElementById('stat-products').innerText = (await rProd.text()).trim().split('\n').length - 1;
+
+                const textProj = await rProj.text();
+                // Tách dòng, lọc bỏ dòng trống và dòng không có ID (cột 0)
+                const countProj = textProj.split('\n').filter(line => {
+                    const cols = line.split(',');
+                    return line.trim() !== "" && cols[0] && cols[0].replace(/"/g, '').trim() !== "";
+                }).length - 1;
+
+                const textProd = await rProd.text();
+                const countProd = textProd.split('\n').filter(line => {
+                    const cols = line.split(',');
+                    return line.trim() !== "" && cols[0] && cols[0].replace(/"/g, '').trim() !== "";
+                }).length - 1;
+
                 const files = await rGH.json();
                 const bytes = files.reduce((s, f) => s + (f.size || 0), 0);
+
+                document.getElementById('stat-projects').innerText = countProj;
+                document.getElementById('stat-products').innerText = countProd;
                 document.getElementById('stat-storage').innerText = (bytes / 1024 / 1024).toFixed(1) + " MB";
-            } catch (e) { console.error("Lỗi thông số"); }
-        }
-
-        function switchTab(el, target) {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            
-            document.getElementById('dashboard-ui').classList.add('hidden');
-            document.getElementById('hosting-ui').classList.add('hidden');
-            document.getElementById('iframe-container').classList.add('hidden');
-
-            if (target === 'dashboard') {
-                document.getElementById('dashboard-ui').classList.remove('hidden');
-                fetchStats();
-            } else if (target === 'hosting') {
-                document.getElementById('hosting-ui').classList.remove('hidden');
-                fetchFiles();
-            } else {
-                document.getElementById('iframe-container').classList.remove('hidden');
-                document.getElementById('main-frame').src = `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal&gid=${target}`;
-            }
+            } catch (e) { console.error("Stats Error"); }
         }
 
         async function fetchFiles() {
             const list = document.getElementById('file-list');
-            list.innerHTML = '<tr><td colspan="4" class="p-10 text-center text-slate-500 animate-pulse uppercase tracking-[0.2em] text-[10px]">Đang đồng bộ đám mây...</td></tr>';
+            list.innerHTML = '<tr><td colspan="4" class="p-10 text-center text-slate-600 animate-pulse text-[10px] uppercase tracking-widest font-bold">Quét dữ liệu đám mây...</td></tr>';
             try {
                 const res = await fetch(`https://api.github.com/repos/${repo}/contents/data?t=${Date.now()}`);
                 const data = await res.json();
@@ -358,105 +281,85 @@
                     name: f.name, size: f.size, type: f.name.split('.').pop().toLowerCase(), path: f.path, sha: f.sha
                 }));
                 renderTable(cachedFiles);
-            } catch (e) { list.innerHTML = 'Lỗi kết nối Server.'; }
+            } catch (e) { list.innerHTML = 'Lỗi kết nối.'; }
         }
 
         function renderTable(data) {
             const list = document.getElementById('file-list');
             list.innerHTML = data.map(f => `
                 <tr class="hover:bg-white/5 transition border-b border-white/5">
-                    <td class="p-4 font-bold text-slate-300 text-xs w-1/3">${f.name}</td>
-                    <td class="p-4 text-slate-500 text-[11px] font-mono">${(f.size/1024).toFixed(1)} KB</td>
-                    <td class="p-4"><span class="bg-sky-500/10 text-sky-400 text-[9px] font-black px-2 py-1 rounded uppercase">${f.type}</span></td>
-                    <td class="p-4 text-right">
-                        <button onclick="copyUrl('${f.path}')" class="text-sky-500 mr-4 hover:text-white transition font-bold text-[9px]">SAO CHÉP</button>
-                        <button onclick="renameFile('${f.path}', '${f.sha}')" class="text-amber-500 mr-4 hover:text-white transition font-bold text-[9px]">ĐỔI TÊN</button>
+                    <td class="p-5 font-bold text-slate-300 w-1/3">${f.name}</td>
+                    <td class="p-5 text-slate-500 font-mono text-[11px]">${(f.size/1024).toFixed(1)} KB</td>
+                    <td class="p-5"><span class="bg-sky-500/10 text-sky-400 text-[9px] font-black px-2 py-1 rounded uppercase tracking-tighter">${f.type}</span></td>
+                    <td class="p-5 text-right">
+                        <button onclick="copyLink('${f.path}')" class="text-sky-500 mr-5 hover:text-white transition font-bold text-[9px]">URL</button>
+                        <button onclick="renameFile('${f.path}', '${f.sha}')" class="text-amber-500 mr-5 hover:text-white transition font-bold text-[9px]">SỬA</button>
                         <button onclick="deleteFile('${f.path}', '${f.sha}')" class="text-rose-500 hover:text-white transition font-bold text-[9px]">XÓA</button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function filterFiles(term) {
-            const filtered = cachedFiles.filter(f => f.name.toLowerCase().includes(term.toLowerCase()));
-            renderTable(filtered);
-        }
-
-        function copyUrl(path) {
-            navigator.clipboard.writeText(`https://raw.githubusercontent.com/${repo}/main/${path}`);
-            alert("Đã sao chép link ảnh!");
-        }
+        function filterFiles(v) { renderTable(cachedFiles.filter(f => f.name.toLowerCase().includes(v.toLowerCase()))); }
+        function copyLink(p) { navigator.clipboard.writeText(`https://raw.githubusercontent.com/${repo}/main/${p}`); alert("Đã copy link!"); }
 
         async function uploadFile() {
             const token = document.getElementById('gh-token').value;
             const fileInput = document.getElementById('gh-file');
             const path = document.getElementById('gh-path').value;
             const status = document.getElementById('upload-status');
-            if(!token || !fileInput.files[0]) return alert("Nhập mã Admin!");
+            if(!token || !fileInput.files[0]) return alert("Nhập mã xác thực!");
             let file = fileInput.files[0];
             status.classList.remove('hidden');
             status.className = "mt-3 text-sky-400 animate-pulse text-[10px]";
-            status.innerText = ">> ĐANG NÉN & TỐI ƯU HÓA DỮ LIỆU...";
+            status.innerText = ">> ĐANG THỰC THI NÉN AI & MÃ HÓA...";
             try {
-                if (file.type.startsWith('image/')) {
-                    file = await imageCompression(file, { maxSizeMB: 0.8, maxWidthOrHeight: 2000, useWebWorker: true });
-                }
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
+                if (file.type.startsWith('image/')) file = await imageCompression(file, { maxSizeMB: 0.8, maxWidthOrHeight: 2000, useWebWorker: true });
+                const reader = new FileReader(); reader.readAsDataURL(file);
                 reader.onloadend = async () => {
                     const content = reader.result.split(',')[1];
                     let sha = "";
-                    const check = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-                    if (check.ok) sha = (await check.json()).sha;
+                    const ck = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, { headers: {'Authorization': `token ${token}`} });
+                    if(ck.ok) sha = (await ck.json()).sha;
                     const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                        method: 'PUT',
-                        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                        method: 'PUT', headers: {'Authorization': `token ${token}`, 'Content-Type': 'application/json'},
                         body: JSON.stringify({ message: `CMS Update`, content, sha })
                     });
-                    if(res.ok) {
-                        status.className = "mt-3 text-emerald-500 font-bold text-[10px]";
-                        status.innerText = ">> TẢI LÊN THÀNH CÔNG";
-                        fetchFiles(); fetchStats();
-                    } else alert("Mã Admin sai!");
+                    if(res.ok) { status.className = "mt-3 text-emerald-500 font-bold text-[10px]"; status.innerText = ">> TẢI LÊN THÀNH CÔNG"; fetchFiles(); fetchStats(); }
+                    else alert("Sai mã xác thực!");
                 };
             } catch (e) { alert("Lỗi!"); }
         }
 
-        function sortTable(key) {
-            if (currentSort.key === key) currentSort.asc = !currentSort.asc;
-            else { currentSort.key = key; currentSort.asc = true; }
-            cachedFiles.sort((a, b) => currentSort.asc ? (a[key] > b[key] ? 1 : -1) : (a[key] < b[key] ? 1 : -1));
+        function sortTable(k) {
+            if (currentSort.key === k) currentSort.asc = !currentSort.asc; else { currentSort.key = k; currentSort.asc = true; }
+            cachedFiles.sort((a,b) => currentSort.asc ? (a[k] > b[k] ? 1 : -1) : (a[k] < b[k] ? 1 : -1));
             renderTable(cachedFiles);
         }
 
         async function deleteFile(p, sha) {
-            const t = document.getElementById('gh-token').value || prompt("Mã Admin:");
-            if(!t || !confirm("Xác nhận xóa tệp?")) return;
+            const t = document.getElementById('gh-token').value || prompt("Nhập mã Admin:");
+            if(!t || !confirm("Xóa tệp vĩnh viễn?")) return;
             const res = await fetch(`https://api.github.com/repos/${repo}/contents/${p}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `token ${t}`, 'Content-Type': 'application/json' },
+                method: 'DELETE', headers: {'Authorization': `token ${t}`, 'Content-Type': 'application/json'},
                 body: JSON.stringify({ message: `CMS Delete`, sha })
             });
             if(res.ok) { fetchFiles(); fetchStats(); }
         }
 
         async function renameFile(oldP, sha) {
-            const t = document.getElementById('gh-token').value || prompt("Mã Admin:");
-            const newN = prompt("Tên tệp mới:");
+            const t = document.getElementById('gh-token').value || prompt("Nhập mã Admin:");
+            const newN = prompt("Tên mới:");
             if(!t || !newN) return;
-            const get = await fetch(`https://api.github.com/repos/${repo}/contents/${oldP}`, { headers: { 'Authorization': `token ${t}` } });
+            const get = await fetch(`https://api.github.com/repos/${repo}/contents/${oldP}`, { headers: {'Authorization': `token ${t}`} });
             const data = await get.json();
             const create = await fetch(`https://api.github.com/repos/${repo}/contents/data/${newN}`, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${t}`, 'Content-Type': 'application/json' },
+                method: 'PUT', headers: {'Authorization': `token ${t}`, 'Content-Type': 'application/json'},
                 body: JSON.stringify({ message: `Rename`, content: data.content })
             });
             if(create.ok) {
                 await fetch(`https://api.github.com/repos/${repo}/contents/${oldP}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `token ${t}`, 'Content-Type': 'application/json' },
+                    method: 'DELETE', headers: {'Authorization': `token ${t}`, 'Content-Type': 'application/json'},
                     body: JSON.stringify({ message: `Clean`, sha })
                 });
                 fetchFiles();
