@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>KGP Telecom - Giải Pháp Viễn Thông & Công Nghệ Hàng Đầu</title>
+    <meta name="description" content="KGP Telecom chuyên cung cấp giải pháp viễn thông, camera giám sát, hệ thống mạng và điện năng lượng mặt trời uy tín tại TP.HCM. Công nghệ trong tầm tay bạn.">
+    <meta name="keywords" content="KGP Telecom, viễn thông, camera, thiết bị mạng, điện mặt trời, Khang Gia Phúc, lắp đặt camera, giải pháp công nghệ">
+    <link rel="canonical" href="https://khanggiaphuc.com/">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="KGP Telecom - Công Nghệ Trong Tầm Tay">
+    <meta property="og:description" content="Giải pháp viễn thông, thiết bị an ninh và năng lượng sạch chuyên nghiệp.">
+    <meta property="og:image" content="https://khanggiaphuc.com/data/logo.jpg">
+    <meta property="og:url" content="https://khanggiaphuc.com/">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "KGP Telecom - Khang Gia Phúc",
+      "image": "https://khanggiaphuc.com/data/logo.jpg",
+      "@id": "https://khanggiaphuc.com",
+      "url": "https://khanggiaphuc.com",
+      "telephone": "0844900099",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "TP.HCM",
+        "addressLocality": "Ho Chi Minh City",
+        "addressCountry": "VN"
+      }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    
+    <style>
+        /* GIỮ NGUYÊN CSS GỐC CỦA BẠN */
+        :root {
+            --primary: #0071ba; --primary-dark: #005a96; --price-red: #d92027;
+            --btn-orange: #ff8a22; --dark-gray: #2d3436; --light-gray: #636e72;
+            --light-bg: #f8fafc; --white: #ffffff; --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+            --radius: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Roboto', sans-serif; line-height: 1.6; color: var(--dark-gray); background: #fff; overflow-x: hidden; }
+
+        header { background: rgba(255,255,255,0.96); backdrop-filter: blur(15px); box-shadow: var(--shadow-sm); position: fixed; width: 100%; top: 0; z-index: 1000; height: 70px; display: flex; align-items: center; }
+        nav { max-width: 1400px; margin: auto; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; width: 100%; gap: 10px; }
+        .nav-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+        h1.logo-wrap { margin: 0; line-height: 0; }
+        .logo img { height: 42px; width: auto; transition: 0.3s; }
+        
+        .search-container { position: relative; flex: 1; max-width: 350px; }
+        .search-box input { width: 100%; padding: 10px 40px 10px 15px; border-radius: 25px; border: 1.5px solid #eee; outline: none; font-size: 0.85rem; transition: 0.3s; background: #f1f5f9; height: 40px; }
+        .search-box i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); cursor: pointer; }
+        
+        /* Tối ưu hiệu năng cho Marquee */
+        .marquee { display: flex; width: max-content; animation: scroll 40s linear infinite; gap: 20px; will-change: transform; }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* Các Styles còn lại giữ nguyên... */
+        .slider-container { width: 100%; height: 500px; margin-top: 70px; overflow: hidden; position: relative; background: #eee; }
+        .slider { display: flex; width: 100%; height: 100%; transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1); }
+        .slide img { width: 100%; height: 100%; object-fit: cover; }
+        section { padding: 60px 20px; max-width: 1300px; margin: auto; scroll-margin-top: 80px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
+        .product-card { background: var(--white); border: 1px solid #f1f5f9; border-radius: var(--radius); padding: 15px; text-align: center; transition: 0.3s; box-shadow: var(--shadow-sm); }
+        .product-card img { width: 100%; height: 180px; object-fit: contain; }
+        
+        @media (max-width: 768px) {
+            .slider-container { height: 220px; }
+            .modal-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader"><div class="spinner"></div><p style="margin-top:10px">KGP TELECOM...</p></div>
+
+    <header class="no-print">
+        <nav>
+            <div class="nav-left">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"><img src="https://khanggiaphuc.com/data/logo.jpg" alt="Logo KGP Telecom - Khang Gia Phúc"></a>
+                </h1>
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" id="product-search" placeholder="Tìm sản phẩm..." autocomplete="off">
+                        <i class="fa-solid fa-magnifying-glass" aria-label="Tìm kiếm"></i>
+                    </div>
+                    <div id="search-results" class="search-results"></div>
+                </div>
+            </div>
+            <ul id="nav-menu">
+                <li><a href="#"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                <li><a href="#products"><i class="fa-solid fa-box"></i> Sản phẩm</a></li>
+                <li><a href="#intro">Giới thiệu</a></li>
+                <li><a href="tel:0844900099" class="nav-hotline"><i class="fa-solid fa-phone"></i> 0844.900.099</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="slider-container no-print">
+        <div class="slider" id="slider">
+            <div class="slide"><img src="https://khanggiaphuc.com/data/SL1.jpg" alt="KGP Telecom Slider 1" loading="eager"></div>
+            <div class="slide"><img src="https://khanggiaphuc.com/data/SL2.jpg" alt="KGP Telecom Slider 2" loading="lazy"></div>
+        </div>
+    </div>
+
+    <section id="products" class="no-print">
+        <div class="section-title"><h2>Sản phẩm tiêu biểu</h2><div class="underline"></div></div>
+        <div class="product-grid" id="product-grid">
+            </div>
+    </section>
+
+    <script>
+        // Tối ưu Tốc độ: Thêm Lazy Loading vào hàm render sản phẩm của bạn
+        // Ví dụ trong hàm render của bạn, hãy đảm bảo ảnh sản phẩm có:
+        // img.setAttribute('loading', 'lazy');
+        
+        window.addEventListener('load', function() {
+            document.getElementById('loader').style.display = 'none';
+        });
+
+        // Giữ nguyên toàn bộ Logic: Giỏ hàng, PDF, Share link...
+        // ... (Copy toàn bộ phần Script cũ của bạn vào đây)
+    </script>
+</body>
+</html>
