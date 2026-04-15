@@ -6,7 +6,6 @@
     <title>KGP Dashboard | Hệ Thống Quản Trị</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- THÊM THƯ VIỆN NÉN ẢNH -->
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
     
     <style>
@@ -14,31 +13,33 @@
         :root { --wp-sidebar: #1d2327; --wp-sidebar-hover: #2271b1; --wp-bg: #f0f0f1; }
         body { font-family: 'Inter', sans-serif; background-color: var(--wp-bg); margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Sidebar & Layout */
         .wp-sidebar { width: 160px; background: var(--wp-sidebar); color: #f0f0f1; flex-shrink: 0; display: flex; flex-direction: column; z-index: 100; }
         .wp-brand { padding: 15px; background: #000; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
         .nav-item { padding: 12px 15px; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #f0f0f1; transition: all 0.1s; cursor: pointer; border-left: 4px solid transparent; }
         .nav-item:hover { background: rgba(255,255,255,0.1); color: #72aee6; }
         .nav-item.active { background: var(--wp-sidebar-hover); color: white; border-left-color: white; }
+        
         .wp-main { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
         .wp-toolbar { height: 32px; background: #1d2327; color: #c3c4c7; display: flex; align-items: center; padding: 0 20px; font-size: 13px; justify-content: space-between; }
         .wp-content { padding: 20px; flex-grow: 1; overflow-y: auto; }
+        
         .workspace-card { background: white; border: 1px solid #c3c4c7; box-shadow: 0 1px 1px rgba(0,0,0,.04); min-height: calc(100vh - 120px); position: relative; }
         iframe { width: 100%; height: 100%; min-height: inherit; border: none; }
         
-        /* Form & Buttons */
         .wp-button { background: #2271b1; border: 1px solid #2271b1; color: #fff; padding: 6px 12px; border-radius: 3px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
         .wp-button:hover { background: #135e96; }
-        .wp-button-secondary { background: #f6f7f7; border-color: #dcdcde; color: #2271b1; }
-        .wp-button-secondary:hover { background: #f0f0f1; border-color: #c3c4c7; }
         .wp-input { border: 1px solid #8c8f94; padding: 5px 10px; border-radius: 4px; font-size: 13px; }
         
-        /* Table */
         .wp-table { width: 100%; border-collapse: collapse; background: white; font-size: 13px; }
         .wp-table th { text-align: left; padding: 12px; border-bottom: 2px solid #f0f0f1; color: #2c3338; background: #f9f9f9; }
         .wp-table td { padding: 12px; border-bottom: 1px solid #f0f0f1; color: #50575e; }
-        
-        /* Modal */
+
+        /* Style cho phần hướng dẫn */
+        .guide-section { padding: 30px; max-width: 900px; }
+        .step-card { border-left: 4px solid #2271b1; padding-left: 20px; margin-bottom: 25px; }
+        .step-number { background: #2271b1; color: white; width: 24px; height: 24px; display: inline-flex; items-center; justify-content: center; border-radius: 50%; font-size: 12px; margin-right: 10px; }
+        .note-box { background: #fff8e5; border: 1px solid #ffeb3b; padding: 15px; border-radius: 4px; margin: 15px 0; }
+
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
     </style>
@@ -48,7 +49,7 @@
     <aside class="wp-sidebar">
         <div class="wp-brand"><i class="fa-solid fa-gauge-high"></i><span>KGP ADMIN</span></div>
         <nav class="mt-4">
-            <div onclick="switchTab(this, '0')" class="nav-item active"><i class="fa-solid fa-house"></i> Bảng tin</div>
+            <div onclick="switchTab(this, 'dashboard')" class="nav-item active"><i class="fa-solid fa-house"></i> Bảng tin</div>
             <div onclick="switchTab(this, '809858153')" class="nav-item"><i class="fa-solid fa-diagram-project"></i> Dự án</div>
             <div onclick="switchTab(this, '895747298')" class="nav-item"><i class="fa-solid fa-box"></i> Sản phẩm</div>
             <div onclick="switchTab(this, 'hosting')" class="nav-item"><i class="fa-solid fa-cloud-arrow-up"></i> Dữ liệu & Hosting</div>
@@ -62,29 +63,78 @@
         </div>
 
         <div class="wp-content">
-            <h2 id="page-title" class="text-2xl font-normal text-[#1d2327] mb-4">Bảng điều khiển</h2>
+            <h2 id="page-title" class="text-2xl font-normal text-[#1d2327] mb-4">Hướng dẫn quản trị</h2>
             
             <div class="workspace-card">
-                <iframe id="main-frame" src="https://docs.google.com/spreadsheets/d/1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk/edit?rm=minimal&gid=0"></iframe>
+                <!-- NỘI DUNG BẢNG TIN (HƯỚNG DẪN) -->
+                <div id="dashboard-ui" class="guide-section">
+                    <h1 class="text-xl font-bold text-blue-800 mb-6 uppercase border-b pb-2">HƯỚNG DẪN THÊM SẢN PHẨM VÀO TRANG WEB</h1>
+                    
+                    <div class="step-card">
+                        <h3 class="font-bold text-gray-800"><span class="step-number">1</span> Truy cập mục sản phẩm</h3>
+                        <p class="text-sm text-gray-600">Đăng nhập vào hệ thống quản trị. Chuyển đến phần <strong>Sản phẩm</strong> ở menu bên trái.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <h3 class="font-bold text-gray-800"><span class="step-number">2</span> Thêm dòng sản phẩm mới</h3>
+                        <p class="text-sm text-gray-600 mb-2">Chèn thêm 1 dòng mới ngay dưới dòng 1 và nhập đầy đủ các thông tin:</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <span class="bg-gray-100 p-2 text-xs rounded border text-gray-700">ID sản phẩm</span>
+                            <span class="bg-gray-100 p-2 text-xs rounded border text-gray-700">Tên sản phẩm</span>
+                            <span class="bg-gray-100 p-2 text-xs rounded border text-gray-700">Danh mục</span>
+                            <span class="bg-gray-100 p-2 text-xs rounded border text-gray-700">Giá bán</span>
+                            <span class="bg-gray-100 p-2 text-xs rounded border text-gray-700">Mô tả ngắn</span>
+                            <span class="bg-gray-100 p-2 text-xs rounded border text-gray-700">Thương hiệu</span>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <h3 class="font-bold text-gray-800"><span class="step-number">3</span> Thêm hình ảnh sản phẩm</h3>
+                        <p class="text-sm text-gray-600">Đặt tên hình ảnh chính theo <strong>ID sản phẩm</strong> (ví dụ: <code class="text-red-600 font-bold">SP001.jpg</code>).</p>
+                        <p class="text-sm text-gray-600 mt-2">Nhấn vào tab <strong>"Dữ liệu & Hosting"</strong> để tải ảnh lên. Nhập mã <code class="bg-gray-200 px-1 italic text-blue-600 font-bold">admin</code>, chọn tệp và bấm <strong>TẢI LÊN</strong>.</p>
+                        
+                        <div class="note-box">
+                            <p class="text-xs font-bold text-gray-700 mb-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Lưu ý về ảnh phụ:</p>
+                            <p class="text-[13px] text-gray-600 italic">Các hình ảnh phụ cần đặt theo định dạng: <br>ID sản phẩm.1.jpg, ID sản phẩm.2.jpg ... ID sản phẩm.9.jpg <br>(Ví dụ: <strong>SP001.1.jpg, SP001.2.jpg</strong>)</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <h3 class="font-bold text-gray-800"><span class="step-number">4</span> Kiểm tra và lưu</h3>
+                        <p class="text-sm text-gray-600">Kiểm tra lại toàn bộ thông tin đã nhập trên file Sheets và lưu lại để hoàn tất.</p>
+                    </div>
+
+                    <div class="mt-10 pt-6 border-t border-dashed flex flex-col md:flex-row justify-between items-start md:items-center">
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm uppercase">HỖ TRỢ KỸ THUẬT</h4>
+                            <p class="text-xs text-gray-500">Hotline: <span class="font-bold text-blue-600">0844.900.099</span></p>
+                            <p class="text-xs text-gray-500">Website: www.khanggiaphuc.com</p>
+                        </div>
+                        <img src="https://khanggiaphuc.com/wp-content/uploads/2023/12/logo-khang-gia-phuc.png" alt="Logo" class="h-10 mt-4 md:mt-0 opacity-50">
+                    </div>
+                </div>
+
+                <!-- IFRAME GOOGLE SHEETS -->
+                <iframe id="main-frame" class="hidden" src=""></iframe>
                 
+                <!-- HOSTING UI -->
                 <div id="hosting-ui" class="hidden h-full flex flex-col">
                     <div class="p-6 border-bottom bg-[#fdfdfd]">
                         <h3 class="text-sm font-bold text-gray-700 uppercase mb-4"><i class="fa-solid fa-plus-circle text-blue-600 mr-2"></i> Tải & Nén tệp lên /data</h3>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-1">GITHUB TOKEN</label>
-                                <input type="password" id="gh-token" class="wp-input w-full" placeholder="Token...">
+                                <label class="block text-[11px] font-bold text-gray-500 mb-1">GITHUB TOKEN (NHẬP 'admin')</label>
+                                <input type="password" id="gh-token" class="wp-input w-full" placeholder="Mã quản trị...">
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-1">CHỌN TỆP (ẢNH SẼ TỰ NÉN)</label>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-1">CHỌN TỆP</label>
                                 <input type="file" id="gh-file" onchange="updatePath(this, 'gh-path')" class="text-xs w-full">
                                 <input type="hidden" id="gh-path" value="data/">
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="uploadToGithub('gh-token', 'gh-file', 'gh-path', 'upload-status')" id="upload-btn" class="wp-button flex-grow justify-center">TẢI LÊN</button>
+                                <button onclick="uploadToGithub('gh-token', 'gh-file', 'gh-path', 'upload-status')" class="wp-button flex-grow justify-center uppercase">Tải lên</button>
                             </div>
                         </div>
-                        
                         <div id="upload-status" class="hidden mt-4 p-3 border-l-4 text-xs"></div>
                     </div>
 
@@ -99,59 +149,31 @@
         </div>
     </main>
 
-    <!-- Modal giữ nguyên -->
-    <div id="quick-modal" class="modal-overlay">
-        <div class="bg-white w-full max-w-lg rounded shadow-2xl border border-gray-400 overflow-hidden mx-4">
-            <div class="bg-[#1d2327] text-white px-4 py-2 flex justify-between items-center">
-                <span class="text-xs font-bold uppercase">Tải lên nhanh (Auto Squoosh)</span>
-                <button onclick="toggleModal(false)" class="text-white hover:text-red-400"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-6 space-y-4">
-                <div>
-                    <label class="block text-[11px] font-bold mb-1">GITHUB TOKEN</label>
-                    <input type="password" id="modal-token" class="wp-input w-full">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-[11px] font-bold mb-1">CHỌN FILE</label>
-                        <input type="file" id="modal-file" onchange="updatePath(this, 'modal-path')" class="text-xs">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold mb-1">ĐƯỜNG DẪN</label>
-                        <input type="text" id="modal-path" value="data/" class="wp-input w-full bg-gray-50 font-mono text-xs" readonly>
-                    </div>
-                </div>
-                <div id="modal-status" class="hidden p-3 border-l-4 text-xs"></div>
-                <button onclick="uploadToGithub('modal-token', 'modal-file', 'modal-path', 'modal-status')" class="wp-button w-full justify-center py-3">BẮT ĐẦU TẢI LÊN</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         const repo = "Tconghanh/khanggiaphuc.com";
+        const REAL_TOKEN = "Gõ_Token_GitHub_Của_Bạn_Vào_Đây"; // Thay token thật vào đây
 
         function switchTab(el, target) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
             document.getElementById('page-title').innerText = el.innerText.trim();
-            if(target === 'hosting') {
-                document.getElementById('main-frame').classList.add('hidden');
+
+            // Ẩn tất cả
+            document.getElementById('dashboard-ui').classList.add('hidden');
+            document.getElementById('main-frame').classList.add('hidden');
+            document.getElementById('hosting-ui').classList.add('hidden');
+
+            if(target === 'dashboard') {
+                document.getElementById('dashboard-ui').classList.remove('hidden');
+            } else if(target === 'hosting') {
                 document.getElementById('hosting-ui').classList.remove('hidden');
                 fetchFiles();
             } else {
-                document.getElementById('main-frame').classList.remove('hidden');
-                document.getElementById('hosting-ui').classList.add('hidden');
-                document.getElementById('main-frame').src = `https://docs.google.com/spreadsheets/d/1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk/edit?rm=minimal&gid=${target}`;
+                const frame = document.getElementById('main-frame');
+                frame.classList.remove('hidden');
+                frame.src = `https://docs.google.com/spreadsheets/d/1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk/edit?rm=minimal&gid=${target}`;
             }
         }
-
-        function toggleModal(show) {
-            document.getElementById('quick-modal').classList.toggle('active', show);
-        }
-
-        window.addEventListener('load', () => {
-            if(window.location.hash === '#quick-upload') toggleModal(true);
-        });
 
         function updatePath(input, targetId) {
             if (input.files && input.files[0]) 
@@ -160,32 +182,36 @@
 
         async function fetchFiles() {
             const list = document.getElementById('file-list');
-            list.innerHTML = '<tr><td colspan="4" class="text-center py-4">Đang tải...</td></tr>';
+            list.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-400 italic">Đang tải danh sách tệp...</td></tr>';
             try {
                 const res = await fetch(`https://api.github.com/repos/${repo}/contents/data?t=${Date.now()}`);
                 const files = await res.json();
                 list.innerHTML = files.map(f => `
                     <tr>
-                        <td class="font-medium">${f.name}</td>
+                        <td class="font-medium text-blue-700">${f.name}</td>
                         <td>${(f.size/1024).toFixed(1)} KB</td>
-                        <td>${f.name.split('.').pop().toUpperCase()}</td>
+                        <td><span class="text-[10px] bg-gray-200 px-1 rounded">${f.name.split('.').pop().toUpperCase()}</span></td>
                         <td class="text-right">
-                            <a href="https://raw.githubusercontent.com/${repo}/main/${f.path}" target="_blank" class="text-blue-500 mr-2">RAW</a>
-                            <button onclick="deleteFile('${f.path}', '${f.sha}')" class="text-red-500">XÓA</button>
+                            <a href="https://raw.githubusercontent.com/${repo}/main/${f.path}" target="_blank" class="text-blue-500 mr-3 text-xs font-bold">XEM</a>
+                            <button onclick="deleteFile('${f.path}', '${f.sha}')" class="text-red-400 text-xs">XÓA</button>
                         </td>
                     </tr>
                 `).join('');
-            } catch (e) { list.innerHTML = 'Lỗi tải dữ liệu.'; }
+            } catch (e) { list.innerHTML = 'Lỗi tải dữ liệu hoặc thư mục trống.'; }
         }
 
-        // HÀM UPLOAD ĐÃ CẢI TIẾN VỚI NÉN ẢNH
         async function uploadToGithub(tokenId, fileId, pathId, statusId) {
-            const token = document.getElementById(tokenId).value;
+            const inputToken = document.getElementById(tokenId).value;
             const fileInput = document.getElementById(fileId);
             const path = document.getElementById(pathId).value;
             const status = document.getElementById(statusId);
 
-            if(!token || !fileInput.files[0]) return alert("Vui lòng nhập Token và chọn file!");
+            // Kiểm tra mã admin giả lập
+            if(inputToken !== "admin") return alert("Mã Token/Admin không chính xác!");
+            if(!fileInput.files[0]) return alert("Vui lòng chọn file!");
+
+            // SỬ DỤNG TOKEN THẬT ĐỂ GỌI API (Đã khai báo ở đầu script)
+            const token = REAL_TOKEN; 
 
             let file = fileInput.files[0];
             status.classList.remove('hidden');
@@ -193,26 +219,16 @@
             status.innerText = "Đang xử lý...";
 
             try {
-                // KIỂM TRA VÀ NÉN NẾU LÀ ẢNH
                 if (file.type.startsWith('image/')) {
                     status.innerText = "Đang nén ảnh tối ưu...";
-                    const options = {
-                        maxSizeMB: 0.9,          // Nén ảnh xuống dưới 900KB
-                        maxWidthOrHeight: 2000, // Max width/height 2000px
-                        useWebWorker: true
-                    };
-                    const originalSize = file.size;
+                    const options = { maxSizeMB: 0.9, maxWidthOrHeight: 2000, useWebWorker: true };
                     file = await imageCompression(file, options);
-                    const compressedSize = file.size;
-                    status.innerText = `Đã nén: ${(originalSize/1024).toFixed(1)}KB -> ${(compressedSize/1024).toFixed(1)}KB. Đang upload...`;
                 }
 
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onloadend = async function() {
                     const content = reader.result.split(',')[1];
-                    
-                    // Kiểm tra file tồn tại để lấy SHA (ghi đè)
                     let sha = "";
                     const check = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
                         headers: { 'Authorization': `token ${token}` }
@@ -222,37 +238,34 @@
                     const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
                         method: 'PUT',
                         headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: `Upload & Compressed: ${path}`, content, sha })
+                        body: JSON.stringify({ message: `Upload: ${path}`, content, sha })
                     });
 
                     if(res.ok) {
                         status.className = "p-3 border-l-4 border-green-500 bg-green-50 text-green-700 text-xs";
-                        status.innerHTML = `Thành công! <br>Link Sheet: <code>=IMAGE("https://raw.githubusercontent.com/${repo}/main/${path}")</code>`;
+                        status.innerHTML = `Thành công! Link: <code>https://raw.githubusercontent.com/${repo}/main/${path}</code>`;
                         fetchFiles();
-                    } else {
-                        throw new Error("Lỗi GitHub API. Kiểm tra Token hoặc quyền Repo.");
-                    }
+                    } else { throw new Error("Lỗi API"); }
                 };
             } catch (e) {
                 status.className = "p-3 border-l-4 border-red-500 bg-red-50 text-red-700 text-xs";
-                status.innerText = "Lỗi: " + e.message;
+                status.innerText = "Lỗi upload!";
             }
         }
 
         async function deleteFile(path, sha) {
-            const token = prompt("Nhập Token để xác nhận xóa:");
-            if(!token) return;
-            if(!confirm("Bạn có chắc chắn muốn xóa tệp này?")) return;
+            const code = prompt("Nhập mã admin để xóa:");
+            if(code !== "admin") return alert("Sai mã!");
+            if(!confirm("Bạn có chắc chắn muốn xóa?")) return;
 
             try {
                 const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
                     method: 'DELETE',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    headers: { 'Authorization': `token ${REAL_TOKEN}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: `Delete: ${path}`, sha })
                 });
                 if(res.ok) fetchFiles();
-                else alert("Lỗi khi xóa! Check lại token.");
-            } catch (e) { alert("Lỗi kết nối."); }
+            } catch (e) { alert("Lỗi xóa."); }
         }
     </script>
 </body>
