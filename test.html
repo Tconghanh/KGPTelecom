@@ -3,275 +3,354 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KGP Dashboard | Hệ Thống Quản Trị Cao Cấp</title>
+    <title>KGP Tech Admin | High-Performance Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
-        :root { 
-            --side-bg: #0f172a; 
-            --side-hover: #1e293b; 
-            --accent: #2563eb;
-            --bg-main: #f8fafc;
+        :root {
+            --bg-dark: #0f172a;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --glass: rgba(30, 41, 59, 0.7);
         }
 
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-main); color: #1e293b; }
-
-        .sidebar { width: 220px; background: var(--side-bg); transition: all 0.3s; flex-shrink: 0; }
-        .nav-link { 
-            padding: 12px 20px; color: #94a3b8; display: flex; align-items: center; gap: 12px;
-            font-size: 14px; font-weight: 500; transition: all 0.2s; border-radius: 8px; margin: 4px 12px;
-        }
-        .nav-link:hover { background: var(--side-hover); color: white; }
-        .nav-link.active { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-
-        .glass-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .wp-input { 
-            border: 1px solid #cbd5e1; padding: 8px 12px; border-radius: 8px; font-size: 13px;
-            transition: all 0.2s; outline: none;
-        }
-        
-        .btn-primary { 
-            background: var(--accent); color: white; padding: 8px 20px; border-radius: 8px; 
-            font-size: 13px; font-weight: 600; transition: all 0.2s;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #e2e8f0;
+            margin: 0;
+            overflow: hidden;
         }
 
-        .custom-table th { background: #f1f5f9; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 20px; }
-        .custom-table td { padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+        /* Sidebar Glassmorphism */
+        .sidebar {
+            width: 240px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            height: 100vh;
+            transition: all 0.3s ease;
+        }
 
-        .step-icon { width: 40px; height: 40px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .nav-item {
+            margin: 8px 16px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #94a3b8;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        /* Main Content Container */
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            height: 70px;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        iframe {
+            width: 100%;
+            height: calc(100vh - 70px);
+            border: none;
+            background: #f8fafc; /* Màu sáng cho Google Sheet dễ nhìn */
+        }
+
+        .btn-action {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body class="flex">
 
     <!-- SIDEBAR -->
-    <aside class="sidebar flex flex-col py-6">
-        <div class="px-8 mb-10 text-white font-bold tracking-tight text-lg flex items-center gap-3">
-            <div class="bg-blue-600 p-2 rounded-lg"><i class="fa-solid fa-layer-group"></i></div>
-            <span>KGP ADMIN</span>
+    <aside class="sidebar flex flex-col py-8">
+        <div class="px-8 mb-10 flex items-center gap-3">
+            <div class="h-10 w-10 bg-sky-500 rounded-xl flex items-center justify-center shadow-lg shadow-sky-500/20">
+                <i class="fa-solid fa-bolt-lightning text-white text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-white tracking-tight">KGP <span class="text-sky-400">TECH</span></h1>
+                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Admin Control</p>
+            </div>
         </div>
-        
+
         <nav class="flex-grow">
-            <div onclick="switchTab(this, 'dashboard')" class="nav-link active cursor-pointer">
-                <i class="fa-solid fa-chart-pie"></i> Bảng tin
+            <div onclick="switchTab(this, 'dashboard')" class="nav-item active">
+                <i class="fa-solid fa-house-chimney-window"></i> Bảng tin
             </div>
-            <div class="px-8 mt-6 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dữ liệu web</div>
-            <div onclick="switchTab(this, '809858153')" class="nav-link cursor-pointer">
-                <i class="fa-solid fa-folder-tree"></i> Quản lý Dự án
+            <div class="px-8 mt-8 mb-2 text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">Hệ thống</div>
+            <div onclick="switchTab(this, '809858153')" class="nav-item">
+                <i class="fa-solid fa-shapes"></i> Quản lý Dự án
             </div>
-            <!-- TAB SẢN PHẨM ĐÃ ĐỔI SANG BIỂU MẪU -->
-            <div onclick="switchTab(this, 'google-form')" class="nav-link cursor-pointer">
-                <i class="fa-solid fa-boxes-stacked"></i> Thêm Sản phẩm
+            <div onclick="switchTab(this, '895747298')" class="nav-item">
+                <i class="fa-solid fa-cube"></i> Quản lý Sản phẩm
             </div>
-            <div onclick="switchTab(this, 'hosting')" class="nav-link cursor-pointer">
-                <i class="fa-solid fa-server"></i> Dữ liệu & Hosting
+            <div onclick="switchTab(this, 'hosting')" class="nav-item">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Dữ liệu & Hosting
             </div>
         </nav>
 
-        <div class="px-8 mt-auto">
-            <div class="bg-slate-800 rounded-xl p-4 text-[10px] text-slate-400">
-                <p class="uppercase font-bold">Hỗ trợ kỹ thuật</p>
-                <p class="text-white text-xs font-semibold mt-1">0844.900.099</p>
+        <div class="mx-6 p-4 bg-slate-900/50 rounded-2xl border border-white/5">
+            <p class="text-[10px] text-slate-500 font-bold mb-2 uppercase">Server Status</p>
+            <div class="flex items-center gap-2">
+                <div class="h-2 w-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span class="text-xs text-slate-300">GitHub API: Online</span>
             </div>
         </div>
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-grow flex flex-col">
-        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8">
-            <div class="flex items-center gap-2 text-sm">
-                <span class="text-slate-400">KGP System</span>
-                <i class="fa-solid fa-chevron-right text-[10px] text-slate-300"></i>
-                <span id="breadcrumb" class="font-semibold text-slate-700">Bảng tin</span>
-            </div>
+    <main class="content-area">
+        <header>
             <div class="flex items-center gap-4">
+                <span id="tab-title" class="text-lg font-bold text-white uppercase tracking-wider">Bảng tin hệ thống</span>
+            </div>
+            <div class="flex items-center gap-6">
                 <div class="text-right">
-                    <p class="text-xs font-bold text-slate-700">Administrator</p>
-                    <p class="text-[10px] text-green-500 flex items-center justify-end gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> Trực tuyến</p>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase">Hỗ trợ 24/7</p>
+                    <p class="text-sm font-bold text-sky-400">0844.900.099</p>
                 </div>
+                <img src="https://raw.githubusercontent.com/Tconghanh/khanggiaphuc.com/main/data/logo.jpg" class="h-10 rounded-lg border border-white/10">
             </div>
         </header>
 
-        <div class="p-8 overflow-y-auto flex-grow">
-            <div id="view-container" class="max-w-6xl mx-auto">
-                
-                <!-- BẢNG TIN -->
-                <div id="dashboard-ui">
-                    <div class="glass-card overflow-hidden">
-                        <div class="p-8 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                            <div>
-                                <h2 class="text-xl font-bold text-slate-800 uppercase">HƯỚNG DẪN THÊM SẢN PHẨM VÀO TRANG WEB</h2>
-                                <p class="text-sm text-slate-500 mt-1">Vui lòng thực hiện theo các bước dưới đây để dữ liệu đồng bộ chính xác.</p>
-                            </div>
-                            <img src="https://raw.githubusercontent.com/Tconghanh/khanggiaphuc.com/main/data/logo.jpg" class="h-14 rounded shadow-sm border-2 border-white">
+        <div id="main-view" class="flex-grow overflow-y-auto">
+            <!-- DASHBOARD VIEW -->
+            <div id="dashboard-ui" class="p-10 max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-3 bg-sky-500/10 rounded-lg text-sky-500"><i class="fa-solid fa-diagram-project text-2xl"></i></div>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Database</span>
                         </div>
-                        
-                        <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div class="flex gap-4">
-                                <div class="step-icon font-bold">1</div>
-                                <div>
-                                    <h4 class="font-bold text-slate-800">Truy cập mục sản phẩm</h4>
-                                    <p class="text-[13px] text-slate-500 mt-1">Chọn menu <b>"Thêm Sản phẩm"</b> để mở Biểu mẫu nhập liệu của Google.</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-4">
-                                <div class="step-icon font-bold">2</div>
-                                <div>
-                                    <h4 class="font-bold text-slate-800">Điền thông tin Biểu mẫu</h4>
-                                    <p class="text-[13px] text-slate-500 mt-1">Nhập ID, Tên, Giá, Danh mục... sau đó bấm Gửi để lưu vào cơ sở dữ liệu.</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-4">
-                                <div class="step-icon font-bold">3</div>
-                                <div>
-                                    <h4 class="font-bold text-slate-800">Tải tệp & Tối ưu ảnh</h4>
-                                    <p class="text-[13px] text-slate-500 mt-1">Sử dụng mục <b>"Hosting"</b> để tải ảnh lên. Nhập Mã xác thực, chọn tệp và bấm TẢI LÊN.</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-4">
-                                <div class="step-icon font-bold">4</div>
-                                <div>
-                                    <h4 class="font-bold text-slate-800">Quy tắc đặt tên ảnh</h4>
-                                    <p class="text-[13px] text-slate-500 mt-1 italic">Ảnh chính: <b>ID.jpg</b> | Ảnh phụ: <b>ID.1.jpg, ID.2.jpg...</b></p>
-                                </div>
-                            </div>
+                        <h3 id="stat-projects" class="text-4xl font-black text-white mb-1">...</h3>
+                        <p class="text-slate-500 text-xs">Tổng số dự án đã đăng ký</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-3 bg-emerald-500/10 rounded-lg text-emerald-500"><i class="fa-solid fa-boxes-stacked text-2xl"></i></div>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Inventory</span>
                         </div>
-
-                        <div class="m-8 p-6 bg-blue-50 border border-blue-100 rounded-xl flex justify-between items-center">
-                            <div>
-                                <h4 class="text-blue-800 font-bold text-sm uppercase">HỖ TRỢ KỸ THUẬT</h4>
-                                <p class="text-xs text-blue-600 mt-1">Hotline: 0844.900.099 | Website: www.khanggiaphuc.com</p>
-                            </div>
-                            <i class="fa-solid fa-headset text-4xl text-blue-200"></i>
+                        <h3 id="stat-products" class="text-4xl font-black text-white mb-1">...</h3>
+                        <p class="text-slate-500 text-xs">Sản phẩm đang kinh doanh</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-3 bg-amber-500/10 rounded-lg text-amber-500"><i class="fa-solid fa-microchip text-2xl"></i></div>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Storage</span>
                         </div>
+                        <h3 id="stat-storage" class="text-4xl font-black text-white mb-1">...</h3>
+                        <p class="text-slate-500 text-xs">Dung lượng thư mục /data</p>
                     </div>
                 </div>
 
-                <!-- IFRAME DÙNG CHUNG CHO SHEETS VÀ GOOGLE FORMS -->
-                <iframe id="main-frame" class="hidden w-full glass-card h-[calc(100vh-180px)]" allow="payment"></iframe>
-
-                <!-- HOSTING UI -->
-                <div id="hosting-ui" class="hidden">
-                    <div class="glass-card mb-6">
-                        <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-                            <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Tải tệp & nén ảnh tự động</h3>
-                            <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-bold">SERVER: DATA/</span>
-                        </div>
-                        <div class="p-6">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 mb-2 uppercase">Mã xác thực quản trị</label>
-                                    <div class="relative">
-                                        <i class="fa-solid fa-shield-halved absolute left-3 top-3 text-slate-400 text-xs"></i>
-                                        <input type="password" id="gh-token" class="wp-input w-full pl-9" placeholder="Mã bảo mật...">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 mb-2 uppercase">Chọn tệp (JPG, PNG, PDF...)</label>
-                                    <input type="file" id="gh-file" onchange="updatePath(this)" class="text-xs w-full file:bg-slate-100 file:border-0 file:rounded file:px-3 file:py-1 file:font-bold">
-                                    <input type="hidden" id="gh-path" value="data/">
-                                </div>
-                                <div>
-                                    <button onclick="uploadFile()" class="btn-primary w-full py-2.5 flex justify-center items-center gap-2">
-                                        <i class="fa-solid fa-cloud-arrow-up"></i> TẢI LÊN NGAY
-                                    </button>
-                                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="stat-card !bg-transparent border-dashed border-slate-700">
+                        <h4 class="font-bold text-white mb-6 flex items-center gap-2"><i class="fa-solid fa-circle-info text-sky-500"></i> QUY TRÌNH VẬN HÀNH</h4>
+                        <div class="space-y-6">
+                            <div class="flex gap-4">
+                                <div class="text-sky-500 font-black text-xl italic opacity-50">01</div>
+                                <p class="text-sm text-slate-400">Cập nhật nội dung tại <strong>Dự án/Sản phẩm</strong>. Hệ thống tự đồng bộ sau 5 giây.</p>
                             </div>
-                            <div id="upload-status" class="hidden mt-4 p-4 rounded-lg text-xs font-medium border"></div>
+                            <div class="flex gap-4">
+                                <div class="text-sky-500 font-black text-xl italic opacity-50">02</div>
+                                <p class="text-sm text-slate-400">Đặt tên ảnh theo ID (VD: <code>SP102.jpg</code>) và tải lên tại tab <strong>Hosting</strong>.</p>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="text-sky-500 font-black text-xl italic opacity-50">03</div>
+                                <p class="text-sm text-slate-400">Sử dụng công thức <code>=IMAGE("Link")</code> trong Sheets để hiển thị ảnh sản phẩm.</p>
+                            </div>
                         </div>
                     </div>
+                    <div class="stat-card bg-gradient-to-br from-slate-900 to-slate-800">
+                        <h4 class="font-bold text-white mb-4 italic text-sm">Tech Support</h4>
+                        <p class="text-xs text-slate-400 mb-6 leading-relaxed">Hệ thống được tối ưu hóa nén ảnh tự động để đạt điểm SEO tối đa. Nếu gặp sự cố đồng bộ, vui lòng liên hệ kỹ thuật.</p>
+                        <a href="https://khanggiaphuc.com" target="_blank" class="inline-block bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-3 rounded-xl text-xs font-bold transition">TRANG CHỦ KHANG GIA PHÚC</a>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="glass-card overflow-hidden">
-                        <table class="custom-table w-full text-left">
-                            <thead>
-                                <tr>
-                                    <th onclick="sortTable('name')" class="cursor-pointer">Tên tệp <i class="fa-solid fa-sort ml-1"></i></th>
-                                    <th onclick="sortTable('size')" class="cursor-pointer">Size <i class="fa-solid fa-sort ml-1"></i></th>
-                                    <th onclick="sortTable('type')" class="cursor-pointer">Loại <i class="fa-solid fa-sort ml-1"></i></th>
-                                    <th class="text-right">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody id="file-list"></tbody>
-                        </table>
+            <!-- HOSTING VIEW -->
+            <div id="hosting-ui" class="hidden p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="lg:col-span-1 stat-card">
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-4 tracking-widest">Mã xác thực quản trị</label>
+                        <input type="password" id="gh-token" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-sky-400 outline-none focus:border-sky-500" placeholder="••••••••">
+                    </div>
+                    <div class="lg:col-span-2 stat-card">
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-4 tracking-widest">Tải lên & Nén ảnh tự động</label>
+                        <div class="flex items-center gap-4">
+                            <input type="file" id="gh-file" onchange="updatePath(this)" class="text-xs text-slate-500 flex-grow file:bg-sky-500 file:border-0 file:rounded-lg file:text-white file:px-4 file:py-2 file:font-bold file:mr-4 file:cursor-pointer">
+                            <input type="hidden" id="gh-path" value="data/">
+                            <button onclick="uploadFile()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2.5 rounded-lg text-xs font-bold transition shadow-lg shadow-emerald-900/20">UPLOAD</button>
+                        </div>
+                        <div id="upload-status" class="hidden mt-3 text-[11px] font-medium"></div>
                     </div>
                 </div>
 
+                <div class="stat-card !p-0 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900/50">
+                                <th onclick="sortTable('name')" class="p-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest cursor-pointer hover:text-sky-400">Tên tệp</th>
+                                <th onclick="sortTable('size')" class="p-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest cursor-pointer hover:text-sky-400">Size</th>
+                                <th onclick="sortTable('type')" class="p-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest cursor-pointer hover:text-sky-400">Loại</th>
+                                <th class="p-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="file-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- IFRAME VIEW -->
+            <div id="iframe-container" class="hidden h-full">
+                <iframe id="main-frame" src=""></iframe>
             </div>
         </div>
     </main>
 
     <script>
         const repo = "Tconghanh/khanggiaphuc.com";
+        const sheetId = "1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk";
         let cachedFiles = [];
         let currentSort = { key: '', asc: true };
 
+        async function fetchStats() {
+            try {
+                // Fetch Projects
+                const resProj = await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=809858153`);
+                const textProj = await resProj.text();
+                const countProj = textProj.trim().split('\n').length - 1;
+                document.getElementById('stat-projects').innerText = countProj > 0 ? countProj : 0;
+
+                // Fetch Products
+                const resProd = await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=895747298`);
+                const textProd = await resProd.text();
+                const countProd = textProd.trim().split('\n').length - 1;
+                document.getElementById('stat-products').innerText = countProd > 0 ? countProd : 0;
+
+                // Fetch Storage
+                const resGH = await fetch(`https://api.github.com/repos/${repo}/contents/data`);
+                const files = await resGH.json();
+                const totalBytes = files.reduce((sum, f) => sum + (f.size || 0), 0);
+                document.getElementById('stat-storage').innerText = (totalBytes / 1024 / 1024).toFixed(2) + " MB";
+            } catch (e) { console.error("Stats Error"); }
+        }
+
         function switchTab(el, target) {
-            document.querySelectorAll('.nav-link').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
-            document.getElementById('breadcrumb').innerText = el.innerText.trim();
+            document.getElementById('tab-title').innerText = el.innerText.trim();
 
-            document.getElementById('dashboard-ui').classList.add('hidden');
-            document.getElementById('main-frame').classList.add('hidden');
-            document.getElementById('hosting-ui').classList.add('hidden');
+            const dashboard = document.getElementById('dashboard-ui');
+            const hosting = document.getElementById('hosting-ui');
+            const iframeCont = document.getElementById('iframe-container');
+            const mainFrame = document.getElementById('main-frame');
 
-            const f = document.getElementById('main-frame');
+            dashboard.classList.add('hidden');
+            hosting.classList.add('hidden');
+            iframeCont.classList.add('hidden');
 
-            if(target === 'dashboard') {
-                document.getElementById('dashboard-ui').classList.remove('hidden');
-            } else if(target === 'hosting') {
-                document.getElementById('hosting-ui').classList.remove('hidden');
+            if (target === 'dashboard') {
+                dashboard.classList.remove('hidden');
+                fetchStats();
+            } else if (target === 'hosting') {
+                hosting.classList.remove('hidden');
                 fetchFiles();
-            } else if(target === 'google-form') {
-                // XỬ LÝ CHÈN GOOGLE FORM
-                f.classList.remove('hidden');
-                f.src = "https://docs.google.com/forms/d/e/1FAIpQLScxoVHD07nQhfM-2IZhmknsPYgfXzhVhZcIZKd1zVK5K4itVA/viewform?embedded=true";
             } else {
-                // XỬ LÝ CHÈN GOOGLE SHEETS
-                f.classList.remove('hidden');
-                f.src = `https://docs.google.com/spreadsheets/d/1knLdhA1j69Qqfa6nMIe20vfufQnvGr4THpehnK0mHPk/edit?rm=minimal&gid=${target}`;
+                iframeCont.classList.remove('hidden');
+                mainFrame.src = `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal&gid=${target}`;
             }
         }
 
-        // --- CÁC HÀM XỬ LÝ DỮ LIỆU GIỮ NGUYÊN ---
-        function updatePath(input) { if (input.files[0]) document.getElementById('gh-path').value = "data/" + input.files[0].name; }
-
         async function fetchFiles() {
             const list = document.getElementById('file-list');
-            list.innerHTML = '<tr><td colspan="4" class="text-center py-10 italic text-slate-400">Đang đồng bộ dữ liệu...</td></tr>';
+            list.innerHTML = '<tr><td colspan="4" class="p-10 text-center text-slate-500 italic">Đang tải tệp tin từ Cloud...</td></tr>';
             try {
                 const res = await fetch(`https://api.github.com/repos/${repo}/contents/data?t=${Date.now()}`);
                 const data = await res.json();
-                cachedFiles = data.map(f => ({ name: f.name, size: f.size, type: f.name.split('.').pop().toLowerCase(), path: f.path, sha: f.sha }));
+                cachedFiles = data.map(f => ({
+                    name: f.name, size: f.size, type: f.name.split('.').pop().toLowerCase(), path: f.path, sha: f.sha
+                }));
                 renderTable(cachedFiles);
-            } catch (e) { list.innerHTML = 'Không thể kết nối máy chủ.'; }
+            } catch (e) { list.innerHTML = 'Lỗi GitHub.'; }
         }
 
         function renderTable(data) {
             const list = document.getElementById('file-list');
             list.innerHTML = data.map(f => `
-                <tr>
-                    <td class="font-semibold text-slate-700">${f.name}</td>
-                    <td class="text-slate-400 text-xs">${(f.size/1024).toFixed(1)} KB</td>
-                    <td><span class="px-2 py-0.5 bg-slate-100 rounded text-[10px] font-bold uppercase">${f.type}</span></td>
-                    <td class="text-right flex justify-end gap-2">
-                        <button onclick="renameFile('${f.path}', '${f.sha}')" class="text-slate-400 hover:text-orange-500"><i class="fa-solid fa-pen"></i></button>
-                        <a href="https://raw.githubusercontent.com/${repo}/main/${f.path}" target="_blank" class="text-slate-400 hover:text-blue-500"><i class="fa-solid fa-eye"></i></a>
-                        <button onclick="deleteFile('${f.path}', '${f.sha}')" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-trash"></i></button>
+                <tr class="hover:bg-slate-800/40 transition">
+                    <td class="p-4 text-sm font-bold text-slate-300">${f.name}</td>
+                    <td class="p-4 text-xs text-slate-500">${(f.size/1024).toFixed(1)} KB</td>
+                    <td class="p-4"><span class="bg-slate-800 text-sky-400 text-[10px] font-black px-2 py-1 rounded-md uppercase">${f.type}</span></td>
+                    <td class="p-4 text-right">
+                        <button onclick="copyRawUrl('${f.path}')" class="text-emerald-500 mr-4 hover:underline text-[10px] font-bold">COPY URL</button>
+                        <button onclick="renameFile('${f.path}', '${f.sha}')" class="text-amber-500 mr-4 hover:underline text-[10px] font-bold uppercase">Rename</button>
+                        <button onclick="deleteFile('${f.path}', '${f.sha}')" class="text-rose-500 hover:underline text-[10px] font-bold uppercase">Xóa</button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function sortTable(key) {
-            if (currentSort.key === key) currentSort.asc = !currentSort.asc; else { currentSort.key = key; currentSort.asc = true; }
-            const sorted = [...cachedFiles].sort((a, b) => {
-                let v1 = a[key], v2 = b[key];
-                return currentSort.asc ? (v1 > v2 ? 1 : -1) : (v1 < v2 ? 1 : -1);
-            });
-            renderTable(sorted);
+        function copyRawUrl(path) {
+            const url = `https://raw.githubusercontent.com/${repo}/main/${path}`;
+            navigator.clipboard.writeText(url);
+            alert("Đã copy link ảnh!");
         }
 
         async function uploadFile() {
@@ -279,11 +358,14 @@
             const fileInput = document.getElementById('gh-file');
             const path = document.getElementById('gh-path').value;
             const status = document.getElementById('upload-status');
-            if(!token || !fileInput.files[0]) return alert("Nhập Mã xác thực!");
+
+            if(!token || !fileInput.files[0]) return alert("Nhập mã xác thực!");
+
             let file = fileInput.files[0];
             status.classList.remove('hidden');
-            status.className = "mt-4 p-4 rounded-lg bg-blue-50 text-blue-700 border-blue-100 border text-xs";
-            status.innerText = "⏳ Đang tối ưu hóa tệp và gửi dữ liệu...";
+            status.className = "mt-3 text-sky-400 text-[11px]";
+            status.innerText = "Đang nén và mã hóa tệp tin...";
+
             try {
                 if (file.type.startsWith('image/')) {
                     file = await imageCompression(file, { maxSizeMB: 0.8, maxWidthOrHeight: 2000, useWebWorker: true });
@@ -293,46 +375,71 @@
                 reader.onloadend = async () => {
                     const content = reader.result.split(',')[1];
                     let sha = "";
-                    const check = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, { headers: { 'Authorization': `token ${token}` } });
-                    if (check.ok) sha = (await check.json()).sha;
-                    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                        method: 'PUT', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: `CMS`, content, sha })
+                    const check = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+                        headers: { 'Authorization': `token ${token}` }
                     });
+                    if (check.ok) sha = (await check.json()).sha;
+
+                    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+                        method: 'PUT',
+                        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: `Cloud Upload`, content, sha })
+                    });
+
                     if(res.ok) {
-                        status.className = "mt-4 p-4 rounded-lg bg-green-50 text-green-700 border-green-100 border text-xs font-bold";
-                        status.innerText = "✅ Tải lên và đồng bộ thành công!";
-                        fetchFiles();
+                        status.className = "mt-3 text-emerald-500 text-[11px] font-bold uppercase";
+                        status.innerText = "Tải lên thành công!";
+                        fetchFiles(); fetchStats();
                     } else alert("Mã xác thực không đúng!");
                 };
             } catch (e) { alert("Lỗi!"); }
         }
 
-        async function deleteFile(path, sha) {
-            const token = document.getElementById('gh-token').value || prompt("Nhập mã xác thực:");
-            if(!token || !confirm("Xóa tệp?")) return;
-            const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-                method: 'DELETE', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: `Del`, sha })
+        function sortTable(key) {
+            if (currentSort.key === key) currentSort.asc = !currentSort.asc;
+            else { currentSort.key = key; currentSort.asc = true; }
+            cachedFiles.sort((a, b) => {
+                let v1 = a[key], v2 = b[key];
+                return currentSort.asc ? (v1 > v2 ? 1 : -1) : (v1 < v2 ? 1 : -1);
             });
-            if(res.ok) fetchFiles();
+            renderTable(cachedFiles);
         }
 
-        async function renameFile(oldPath, sha) {
-            const token = document.getElementById('gh-token').value || prompt("Nhập Mã xác thực:");
-            const newName = prompt("Tên mới (VD: SP001.jpg):");
-            if(!token || !newName) return;
-            const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/${oldPath}`, { headers: { 'Authorization': `token ${token}` } });
-            const fileData = await getRes.json();
-            const createRes = await fetch(`https://api.github.com/repos/${repo}/contents/data/${newName}`, {
-                method: 'PUT', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: `Ren`, content: fileData.content })
+        async function deleteFile(p, sha) {
+            const t = document.getElementById('gh-token').value || prompt("Nhập mã xác thực:");
+            if(!t || !confirm("Xóa file?")) return;
+            const res = await fetch(`https://api.github.com/repos/${repo}/contents/${p}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `token ${t}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: `Cloud Delete`, sha })
             });
-            if(createRes.ok) {
-                await fetch(`https://api.github.com/repos/${repo}/contents/${oldPath}`, { method: 'DELETE', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Rem`, sha }) });
+            if(res.ok) { fetchFiles(); fetchStats(); }
+        }
+
+        async function renameFile(oldP, sha) {
+            const t = document.getElementById('gh-token').value || prompt("Mã xác thực:");
+            const newN = prompt("Tên tệp mới:");
+            if(!t || !newN) return;
+            const get = await fetch(`https://api.github.com/repos/${repo}/contents/${oldP}`, { headers: { 'Authorization': `token ${t}` } });
+            const data = await get.json();
+            const create = await fetch(`https://api.github.com/repos/${repo}/contents/data/${newN}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${t}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: `Rename`, content: data.content })
+            });
+            if(create.ok) {
+                await fetch(`https://api.github.com/repos/${repo}/contents/${oldP}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `token ${t}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: `Clean`, sha })
+                });
                 fetchFiles();
             }
         }
+
+        function updatePath(i) { if(i.files[0]) document.getElementById('gh-path').value = "data/" + i.files[0].name; }
+
+        window.onload = fetchStats;
     </script>
 </body>
 </html>
