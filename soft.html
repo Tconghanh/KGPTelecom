@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tconghanh | Pro Windows Toolkit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --accent: #00f2fe;
+            --bg-dark: #05070a;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+            --sub-text: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text); 
+            overflow-x: hidden; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Animated Background */
+        #particles-js { 
+            position: fixed; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -1; 
+            background: radial-gradient(circle at 50% 50%, #101827 0%, #05070a 100%);
+        }
+
+        .container { 
+            max-width: 1100px; 
+            width: 100%;
+            padding: 80px 20px; 
+            z-index: 1;
+        }
+
+        /* Header Section */
+        header { 
+            text-align: center; 
+            margin-bottom: 80px; 
+            animation: fadeInDown 1s ease;
+        }
+        
+        header h1 { 
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 800; 
+            letter-spacing: -3px; 
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--secondary) 100%);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 10px 20px rgba(0, 210, 255, 0.3));
+        }
+
+        header p { 
+            color: var(--sub-text); 
+            font-size: 0.9rem; 
+            letter-spacing: 5px; 
+            text-transform: uppercase; 
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* Main Download Grid */
+        .download-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+            gap: 25px; 
+            margin-bottom: 50px;
+        }
+
+        .soft-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 35px 25px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .soft-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.05));
+            pointer-events: none;
+        }
+
+        .soft-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0, 210, 255, 0.1);
+        }
+
+        .soft-card i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+
+        .soft-card.ms { color: #00a4ef; }
+        .soft-card.anhdv { color: #00ff88; }
+        .soft-card.dlc { color: #f39c12; }
+        .soft-card.htcg { color: #ff4757; }
+
+        .soft-card h3 { color: #fff; font-size: 1.3rem; font-weight: 700; }
+        .soft-card p { color: var(--sub-text); font-size: 0.85rem; }
+
+        .btn-visit {
+            margin-top: auto;
+            padding: 10px 25px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .soft-card:hover .btn-visit {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+        }
+
+        /* PowerShell Automation Section */
+        .automation-section {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 40px;
+            margin-top: 30px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .section-title h2 { font-size: 1.5rem; font-weight: 700; }
+        .section-title .dot { width: 10px; height: 10px; background: #ff5f56; border-radius: 50%; box-shadow: 0 0 10px #ff5f56; }
+
+        .command-list { display: flex; flex-direction: column; gap: 20px; }
+
+        .cmd-item {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .cmd-item:hover {
+            border-color: var(--primary);
+            background: #161b22;
+            transform: scale(1.01);
+        }
+
+        .cmd-info { display: flex; flex-direction: column; gap: 5px; }
+        .cmd-info label { color: var(--primary); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+        .cmd-info code { 
+            font-family: 'Fira Code', monospace; 
+            color: #e6edf3; 
+            font-size: 0.95rem; 
+            background: transparent;
+        }
+
+        .copy-icon { color: var(--sub-text); font-size: 1.1rem; transition: 0.3s; }
+        .cmd-item:hover .copy-icon { color: var(--primary); transform: rotate(-10deg); }
+
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background: var(--primary);
+            color: #000;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 50px;
+            transform: translateX(-50%);
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.4);
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: slideUp 0.5s, fadeOut 0.5s 2.5s forwards;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { bottom: 0; opacity: 0; } to { bottom: 50px; opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        @media (max-width: 768px) {
+            .download-grid { grid-template-columns: 1fr; }
+            .automation-section { padding: 25px; }
+            .cmd-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .copy-icon { align-self: flex-end; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <div class="container">
+        <header>
+            <p>Ultimate Windows Resources</p>
+            <h1>TCONGHANH TOOLS</h1>
+        </header>
+
+        <div class="download-grid">
+            <a href="https://www.microsoft.com/software-download/" target="_blank" class="soft-card ms">
+                <i class="fab fa-windows"></i>
+                <h3>Microsoft ISO</h3>
+                <p>Windows 10 & 11 Official</p>
+                <div class="btn-visit">Truy cập</div>
+            </a>
+
+            <a href="https://anhdvboot.com/" target="_blank" class="soft-card anhdv">
+                <i class="fas fa-toolbox"></i>
+                <h3>Anhdv Boot</h3>
+                <p>WinPE cứu hộ chuyên nghiệp</p>
+                <div class="btn-visit">Truy cập</div>
+            </a>
+
+            <a href="https://dlcboot.com/" target="_blank" class="soft-card dlc">
+                <i class="fas fa-compact-disc"></i>
+                <h3>DLC Boot</h3>
+                <p>Công cụ đa năng Trần Duy Linh</p>
+                <div class="btn-visit">Truy cập</div>
+            </a>
+
+            <a href="https://htcg.vn/soft/" target="_blank" class="soft-card htcg">
+                <i class="fas fa-cloud-download-alt"></i>
+                <h3>HTCG Soft</h3>
+                <p>Kho phần mềm Full Crack</p>
+                <div class="btn-visit">Truy cập</div>
+            </a>
+        </div>
+
+        <div class="automation-section">
+            <div class="section-title">
+                <div class="dot"></div>
+                <h2>PowerShell Automation</h2>
+            </div>
+            
+            <div class="command-list">
+                <!-- Command 1 -->
+                <div class="cmd-item" onclick="copyText('irm https://christitus.com/win | iex', 'Winutil')">
+                    <div class="cmd-info">
+                        <label>1. Winutil by ChrisTitusTech</label>
+                        <code>irm "https://christitus.com/win" | iex</code>
+                    </div>
+                    <i class="far fa-copy copy-icon"></i>
+                </div>
+
+                <!-- Command 2 -->
+                <div class="cmd-item" onclick="copyText('iex (irm https://get.activated.win)', 'Active Win & Office')">
+                    <div class="cmd-info">
+                        <label>2. Active Win & Office (MAS)</label>
+                        <code>iex (irm https://get.activated.win)</code>
+                    </div>
+                    <i class="far fa-copy copy-icon"></i>
+                </div>
+
+                <!-- Command 3 -->
+                <div class="cmd-item" onclick="copyText('& ([scriptblock]::Create((irm https://debloat.raphi.re/)))', 'Win11Debloat')">
+                    <div class="cmd-info">
+                        <label>3. Windows 11 Debloat</label>
+                        <code>& ([scriptblock]::Create((irm https://debloat.raphi.re/)))</code>
+                    </div>
+                    <i class="far fa-copy copy-icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">Đã sao chép lệnh thành công!</div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Particle background config
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#00d2ff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.2, "random": false },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00d2ff", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } } }
+            },
+            "retina_detect": true
+        });
+
+        // Copy function
+        function copyText(text, name) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById("toast");
+                toast.innerText = `Đã sao chép: ${name}`;
+                toast.className = "show";
+                setTimeout(() => { toast.className = ""; }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>
